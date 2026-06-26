@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { addresses, services, trainers } from '../data/mockData'
 import { useAppState } from '../context/AppStateContext'
-import { EmptyState, InputField, PageCard, PrimaryButton, SecondaryButton } from '../components/ui'
+import { EmptyState, FigmaScreen, InputField, PageCard, PrimaryButton, SecondaryButton } from '../components/ui'
 import { formatCurrency, todayIsoDate } from '../utils/format'
 import { figmaAssets } from '../data/figmaAssets'
 
@@ -15,6 +15,7 @@ export function AddressPage() {
   return (
     <div className="page-grid">
       <PageCard className="address-sheet">
+        <FigmaScreen file="Address Selection.png" label="Address selection reference" />
         <h2>Select Address</h2>
         <div
           className="map-preview"
@@ -57,6 +58,7 @@ export function SchedulePage() {
   return (
     <div className="page-grid">
       <PageCard>
+        <FigmaScreen file="Booking & Scheduling.png" label="Schedule reference" />
         <h2>Schedule Session</h2>
         <div className="stack">
           <InputField
@@ -260,6 +262,7 @@ export function ConfirmationPage() {
   return (
     <div className="center-page">
       <PageCard className="hero-card success-card">
+        <FigmaScreen file="Booking Confirmation.png" label="Booking confirmation reference" />
         <h2>Booking Confirmed</h2>
         <p>Your trainer is assigned and session details are now available in history.</p>
         <div

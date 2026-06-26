@@ -46,7 +46,7 @@ export function LoginPage() {
       <PageCard className="login-card">
         <h2>Welcome Back</h2>
         <p>Login with your phone number to continue.</p>
-        <form onSubmit={onSubmit} className="stack">
+        <form onSubmit={onSubmit} className="stack auth-form">
           <InputField
             label="Phone Number"
             placeholder="9876543210"
@@ -57,10 +57,12 @@ export function LoginPage() {
             }}
             error={error}
           />
-          <small className="muted-text">Use any 10-digit number for demo login.</small>
-          <PrimaryButton type="submit" disabled={!isPhoneValid}>
-            {isPhoneValid ? 'Send OTP' : 'Enter 10-digit number'}
-          </PrimaryButton>
+          <div className="auth-actions">
+            <small className="muted-text">Use any 10-digit number for demo login.</small>
+            <PrimaryButton type="submit" disabled={!isPhoneValid}>
+              {isPhoneValid ? 'Send OTP' : 'Enter 10-digit number'}
+            </PrimaryButton>
+          </div>
         </form>
       </PageCard>
     </div>
@@ -91,7 +93,7 @@ export function OtpPage() {
       <PageCard className="login-card">
         <h2>OTP Verification</h2>
         <p>We sent a code to +91 {state.phone || '**********'}.</p>
-        <form onSubmit={verifyOtp} className="stack">
+        <form onSubmit={verifyOtp} className="stack auth-form">
           <InputField
             label="OTP Code"
             placeholder="1234"
@@ -102,10 +104,12 @@ export function OtpPage() {
             }}
             error={error}
           />
-          <PrimaryButton type="submit">Verify & Continue</PrimaryButton>
-          <SecondaryButton type="button" onClick={() => navigate('/login')}>
-            Change Number
-          </SecondaryButton>
+          <div className="auth-actions">
+            <PrimaryButton type="submit">Verify & Continue</PrimaryButton>
+            <SecondaryButton type="button" onClick={() => navigate('/login')}>
+              Change Number
+            </SecondaryButton>
+          </div>
         </form>
       </PageCard>
     </div>

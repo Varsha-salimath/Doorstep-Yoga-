@@ -2,30 +2,67 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { services, trainers } from '../data/mockData'
 import { useAppState } from '../context/AppStateContext'
-import { EmptyState, PageCard, PrimaryButton, SecondaryButton } from '../components/ui'
+import { EmptyState, FigmaScreen, PageCard, PrimaryButton, SecondaryButton } from '../components/ui'
 import { formatCurrency } from '../utils/format'
 import { figmaAssets } from '../data/figmaAssets'
 
 export function HomePage() {
-  const { state } = useAppState()
   const topTrainers = trainers.slice(0, 3)
+  const serviceTiles = [
+    { id: 's1', title: '1-on-1 Yoga', subtitle: 'Personalized flows', icon: '🧘', tint: 'mint' },
+    { id: 's2', title: 'Prenatal Yoga', subtitle: 'Gentle & Safe', icon: '🤰', tint: 'peach' },
+    { id: 's3', title: 'Couples Yoga', subtitle: 'Bond & Breath', icon: '💛', tint: 'yellow' },
+    { id: 's4', title: 'Therapy Yoga', subtitle: 'Healing focus', icon: '🩹', tint: 'mint' },
+    { id: 's5', title: 'Group Sessions', subtitle: 'Community wellness', icon: '👥', tint: 'mint', full: true },
+  ]
+
   return (
-    <div className="page-grid">
-      <PageCard className="hero-card home-hero-card">
-        <div
-          className="home-hero"
-          style={{ backgroundImage: `url(${figmaAssets.homeHero})` }}
-        >
-          <div className="overlay">
-            <h2>50% off your first 1-on-1 session</h2>
-            <p>Experience personalized wellness with expert practitioners.</p>
+    <div className="page-grid home-screen">
+      <section className="home-hero home-section" style={{ backgroundImage: `url(${figmaAssets.homeHero})` }}>
+        <div className="overlay">
+          <h2>50% off your first 1-on-1 session</h2>
+          <p>Experience personalized wellness with our expert practitioners from the comfort of home.</p>
+          <div className="hero-dots">
+            <span className="active" />
+            <span />
+            <span />
           </div>
         </div>
-      </PageCard>
-      <PageCard>
-        <div className="row-space">
+      </section>
+
+      <div className="actions-row home-quick-actions">
+        <Link to="/services" className="link-btn">
+          Start Booking
+        </Link>
+        <Link to="/trainers" className="link-btn secondary">
+          View Trainers
+        </Link>
+      </div>
+
+      <section className="home-section">
+        <div className="row-space section-head">
+          <h3>Our Services</h3>
+          <Link to="/services">View All</Link>
+        </div>
+        <div className="services-exact-grid">
+          {serviceTiles.map((service) => (
+            <button
+              key={service.id}
+              type="button"
+              className={service.full ? 'service-exact-card full' : 'service-exact-card'}
+            >
+              <span className={`service-icon ${service.tint}`}>{service.icon}</span>
+              <strong>{service.title}</strong>
+              <small>{service.subtitle}</small>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="home-section">
+        <div className="row-space section-head">
           <h3>Top Mentors</h3>
-          <Link to="/trainers">View all</Link>
+          <Link to="/trainers">View All</Link>
         </div>
         <div className="mentor-scroll">
           {topTrainers.map((trainer) => (
@@ -47,28 +84,7 @@ export function HomePage() {
             </article>
           ))}
         </div>
-        <div className="actions-row">
-          <Link to="/services" className="link-btn">
-            Continue Journey
-          </Link>
-        </div>
-      </PageCard>
-      <PageCard>
-        <h3>Recently Viewed</h3>
-        {state.recentlyViewed.length === 0 ? (
-          <EmptyState
-            title="No recent profiles"
-            body="Trainers you open will appear here for quick access."
-          />
-        ) : (
-          <div className="chip-wrap">
-            {state.recentlyViewed.map((id) => {
-              const trainer = trainers.find((item) => item.id === id)
-              return trainer ? <span key={id} className="chip">{trainer.name}</span> : null
-            })}
-          </div>
-        )}
-      </PageCard>
+      </section>
     </div>
   )
 }
@@ -185,6 +201,7 @@ export function PreferencesPage() {
   return (
     <div className="page-grid">
       <PageCard>
+        <FigmaScreen file="Trainer Preference Filter.png" label="Trainer preferences reference" />
         <h2>Your Preferences</h2>
         <p>Refine trainer suggestions by style, gender, and experience.</p>
         <div className="stack">
@@ -259,6 +276,7 @@ export function TrainerDetailsPage() {
   return (
     <div className="page-grid">
       <PageCard>
+        <FigmaScreen file="Trainer Profile Page.png" label="Trainer profile reference" />
         <h2>{trainer.name}</h2>
         <p>
           {trainer.experienceYears} years · {trainer.rating}★ ({trainer.sessions}+ sessions)

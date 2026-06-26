@@ -1,5 +1,4 @@
 import { Link, NavLink, Outlet } from 'react-router-dom'
-import { useAppState } from '../context/AppStateContext'
 
 const navItems = [
   { to: '/home', label: 'Home' },
@@ -9,16 +8,18 @@ const navItems = [
 ]
 
 export function AppLayout() {
-  const { state } = useAppState()
   return (
     <div className="layout">
       <header className="top-nav">
-        <Link to="/home" className="brand-link">
-          New Delhi, India
+        <Link to="/home" className="location-wrap">
+          <span className="location-pin">◉</span>
+          <span>
+            <small>CURRENT LOCATION</small>
+            <strong>New Delhi, India</strong>
+          </span>
         </Link>
         <div className="top-nav-actions">
-          <Link to="/notifications">⏺</Link>
-          <Link to="/settings">{state.userName.split(' ')[0]}</Link>
+          <Link to="/notifications" className="icon-btn">🔔</Link>
         </div>
       </header>
       <main className="route-shell animate-page">

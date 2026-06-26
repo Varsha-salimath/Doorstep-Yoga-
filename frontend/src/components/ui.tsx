@@ -63,3 +63,17 @@ export function EmptyState({
 export function Skeleton({ className = '' }: { className?: string }) {
   return <div className={`skeleton ${className}`.trim()} />
 }
+
+export function FigmaScreen({
+  file,
+  label,
+}: {
+  file: string
+  label: string
+}) {
+  return (
+    <div className="figma-screen">
+      <img src={`/stitch-screens/${encodeURIComponent(file)}`} alt={label} />
+    </div>
+  )
+}
