@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type CSSProperties, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type CSSProperties, type FormEvent, type ReactNode } from 'react'
 import {
   NavLink,
   Navigate,
@@ -8,7 +8,14 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom'
-import { clearPendingPhone, getPendingPhone, resendOtp, sendOtp, verifyOtp } from './api'
+import {
+  clearPendingPhone,
+  getAuthToken,
+  getPendingPhone,
+  resendOtp,
+  sendOtp,
+  verifyOtp,
+} from './api'
 import './App.css'
 
 type Hotspot = {
@@ -1091,187 +1098,245 @@ function ConfirmationScreen() {
   )
 }
 
+function RequireAuth({ children }: { children: ReactNode }) {
+  return getAuthToken() ? <>{children}</> : <Navigate to="/login" replace />
+}
+
+function RedirectIfAuthenticated({ children }: { children: ReactNode }) {
+  return getAuthToken() ? <Navigate to="/home" replace /> : <>{children}</>
+}
+
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<LoginScreen />} />
-      <Route path="/otp" element={<OtpScreen />} />
+      <Route path="/" element={<Navigate to={getAuthToken() ? '/home' : '/login'} replace />} />
+      <Route
+        path="/login"
+        element={
+          <RedirectIfAuthenticated>
+            <LoginScreen />
+          </RedirectIfAuthenticated>
+        }
+      />
+      <Route
+        path="/otp"
+        element={
+          <RedirectIfAuthenticated>
+            <OtpScreen />
+          </RedirectIfAuthenticated>
+        }
+      />
       <Route
         path="/address"
         element={
-          <Screen
-            htmlSrc={stitchScreenUrl('address_selection')}
-            alt="Address Selection"
-            hotspots={[
-              {
-                to: '/home',
-                label: 'Detect location',
-                style: { left: '10%', right: '10%', top: '49%', height: '8%' },
-              },
-              {
-                to: '/home',
-                label: 'Home address',
-                style: { left: '10%', right: '10%', top: '62%', height: '10%' },
-              },
-              {
-                to: '/home',
-                label: 'Office address',
-                style: { left: '10%', right: '10%', top: '72%', height: '10%' },
-              },
-            ]}
-          />
+          <RequireAuth>
+            <Screen
+              htmlSrc={stitchScreenUrl('address_selection')}
+              alt="Address Selection"
+              hotspots={[
+                {
+                  to: '/home',
+                  label: 'Detect location',
+                  style: { left: '10%', right: '10%', top: '49%', height: '8%' },
+                },
+                {
+                  to: '/home',
+                  label: 'Home address',
+                  style: { left: '10%', right: '10%', top: '62%', height: '10%' },
+                },
+                {
+                  to: '/home',
+                  label: 'Office address',
+                  style: { left: '10%', right: '10%', top: '72%', height: '10%' },
+                },
+              ]}
+            />
+          </RequireAuth>
         }
       />
       <Route
         path="/home"
         element={
-          <Screen
-            htmlSrc={stitchScreenUrl('home_service_selection')}
-            alt="Home Service Selection"
-            showBottomNav={false}
-            allowEmbedInteraction={true}
-            hotspots={[
-              {
-                to: '/trainers?category=1-on-1%20Yoga',
-                label: 'Service one on one',
-                style: { left: '20px', width: '166px', top: '332px', height: '180px' },
-              },
-              {
-                to: '/trainers?category=Prenatal%20Yoga',
-                label: 'Service prenatal',
-                style: { left: '204px', width: '166px', top: '332px', height: '180px' },
-              },
-              {
-                to: '/trainers?category=Couples%20Yoga',
-                label: 'Service couples',
-                style: { left: '20px', width: '166px', top: '516px', height: '180px' },
-              },
-              {
-                to: '/trainers?category=Therapy%20Yoga',
-                label: 'Service therapy',
-                style: { left: '204px', width: '166px', top: '516px', height: '180px' },
-              },
-              {
-                to: '/trainers',
-                label: 'View mentors',
-                style: { left: '5%', right: '36%', top: '83.5%', height: '12%' },
-              },
-              {
-                to: '/group-session',
-                label: 'Group sessions service',
-                style: { left: '12px', width: '366px', top: '688px', height: '150px' },
-              },
-              {
-                to: '/preferences',
-                label: 'Refine preferences CTA',
-                variant: 'preferences-fab',
-                style: { right: '14px', bottom: '92px', width: '56px', height: '56px', zIndex: 120 },
-              },
-              {
-                to: '/notifications',
-                label: 'Home notifications',
-                style: { left: '86%', width: '10%', top: '1%', height: '5%' },
-              },
-            ]}
-          />
+          <RequireAuth>
+            <Screen
+              htmlSrc={stitchScreenUrl('home_service_selection')}
+              alt="Home Service Selection"
+              showBottomNav={false}
+              allowEmbedInteraction={true}
+              hotspots={[
+                {
+                  to: '/trainers?category=1-on-1%20Yoga',
+                  label: 'Service one on one',
+                  style: { left: '20px', width: '166px', top: '332px', height: '180px' },
+                },
+                {
+                  to: '/trainers?category=Prenatal%20Yoga',
+                  label: 'Service prenatal',
+                  style: { left: '204px', width: '166px', top: '332px', height: '180px' },
+                },
+                {
+                  to: '/trainers?category=Couples%20Yoga',
+                  label: 'Service couples',
+                  style: { left: '20px', width: '166px', top: '516px', height: '180px' },
+                },
+                {
+                  to: '/trainers?category=Therapy%20Yoga',
+                  label: 'Service therapy',
+                  style: { left: '204px', width: '166px', top: '516px', height: '180px' },
+                },
+                {
+                  to: '/trainers',
+                  label: 'View mentors',
+                  style: { left: '5%', right: '36%', top: '83.5%', height: '12%' },
+                },
+                {
+                  to: '/group-session',
+                  label: 'Group sessions service',
+                  style: { left: '12px', width: '366px', top: '688px', height: '150px' },
+                },
+                {
+                  to: '/preferences',
+                  label: 'Refine preferences CTA',
+                  variant: 'preferences-fab',
+                  style: { right: '14px', bottom: '92px', width: '56px', height: '56px', zIndex: 120 },
+                },
+                {
+                  to: '/notifications',
+                  label: 'Home notifications',
+                  style: { left: '86%', width: '10%', top: '1%', height: '5%' },
+                },
+              ]}
+            />
+          </RequireAuth>
         }
       />
       <Route
         path="/trainers"
-        element={<TrainerListingScreen />}
+        element={
+          <RequireAuth>
+            <TrainerListingScreen />
+          </RequireAuth>
+        }
       />
       <Route
         path="/preferences"
-        element={<PreferencesScreen />}
+        element={
+          <RequireAuth>
+            <PreferencesScreen />
+          </RequireAuth>
+        }
       />
       <Route
         path="/group-session"
-        element={<GroupSessionScreen />}
+        element={
+          <RequireAuth>
+            <GroupSessionScreen />
+          </RequireAuth>
+        }
       />
       <Route
         path="/favorites"
-        element={<FavoritesScreen />}
+        element={
+          <RequireAuth>
+            <FavoritesScreen />
+          </RequireAuth>
+        }
       />
       <Route
         path="/notifications"
-        element={<NotificationsScreen />}
+        element={
+          <RequireAuth>
+            <NotificationsScreen />
+          </RequireAuth>
+        }
       />
       <Route
         path="/account"
         element={
-          <Screen
-            htmlSrc={stitchScreenUrl('user_profile_account')}
-            alt="User Profile Account"
-            showBottomNav={false}
-            hotspots={[
-              {
-                to: '/notifications',
-                label: 'Account notifications',
-                style: { left: '86%', width: '10%', top: '1.2%', height: '5%' },
-              },
-              {
-                to: '/home',
-                label: 'Account page bottom home',
-                style: { left: '2%', width: '24%', top: '92.5%', height: '7.2%' },
-              },
-              {
-                to: '/trainers',
-                label: 'Account page bottom search',
-                style: { left: '26%', width: '24%', top: '92.5%', height: '7.2%' },
-              },
-              {
-                to: '/favorites',
-                label: 'Account page bottom favorites',
-                style: { left: '50%', width: '24%', top: '92.5%', height: '7.2%' },
-              },
-              {
-                to: '/account',
-                label: 'Account page bottom account',
-                style: { left: '74%', width: '24%', top: '92.5%', height: '7.2%' },
-              },
-            ]}
-          />
+          <RequireAuth>
+            <Screen
+              htmlSrc={stitchScreenUrl('user_profile_account')}
+              alt="User Profile Account"
+              showBottomNav={false}
+              hotspots={[
+                {
+                  to: '/notifications',
+                  label: 'Account notifications',
+                  style: { left: '86%', width: '10%', top: '1.2%', height: '5%' },
+                },
+                {
+                  to: '/home',
+                  label: 'Account page bottom home',
+                  style: { left: '2%', width: '24%', top: '92.5%', height: '7.2%' },
+                },
+                {
+                  to: '/trainers',
+                  label: 'Account page bottom search',
+                  style: { left: '26%', width: '24%', top: '92.5%', height: '7.2%' },
+                },
+                {
+                  to: '/favorites',
+                  label: 'Account page bottom favorites',
+                  style: { left: '50%', width: '24%', top: '92.5%', height: '7.2%' },
+                },
+                {
+                  to: '/account',
+                  label: 'Account page bottom account',
+                  style: { left: '74%', width: '24%', top: '92.5%', height: '7.2%' },
+                },
+              ]}
+            />
+          </RequireAuth>
         }
       />
       <Route
         path="/trainer-profile"
         element={
-          <Screen
-            htmlSrc={stitchScreenUrl('trainer_profile_page')}
-            alt="Trainer Profile"
-            hotspots={[
-              {
-                to: '/trainers',
-                label: 'Trainer profile back',
-                style: { left: '3%', width: '12%', top: '1.3%', height: '5%' },
-              },
-              {
-                action: 'share',
-                label: 'Trainer profile share',
-                style: { left: '64%', width: '12%', top: '1.3%', height: '5%' },
-              },
-              {
-                to: '/favorites',
-                label: 'Trainer profile favorite',
-                style: { left: '78%', width: '12%', top: '1.3%', height: '5%' },
-              },
-              {
-                to: '/schedule',
-                label: 'Check availability',
-                style: { left: '7%', right: '7%', top: '92%', height: '6%' },
-              },
-            ]}
-          />
+          <RequireAuth>
+            <Screen
+              htmlSrc={stitchScreenUrl('trainer_profile_page')}
+              alt="Trainer Profile"
+              hotspots={[
+                {
+                  to: '/trainers',
+                  label: 'Trainer profile back',
+                  style: { left: '3%', width: '12%', top: '1.3%', height: '5%' },
+                },
+                {
+                  action: 'share',
+                  label: 'Trainer profile share',
+                  style: { left: '64%', width: '12%', top: '1.3%', height: '5%' },
+                },
+                {
+                  to: '/favorites',
+                  label: 'Trainer profile favorite',
+                  style: { left: '78%', width: '12%', top: '1.3%', height: '5%' },
+                },
+                {
+                  to: '/schedule',
+                  label: 'Check availability',
+                  style: { left: '7%', right: '7%', top: '92%', height: '6%' },
+                },
+              ]}
+            />
+          </RequireAuth>
         }
       />
       <Route
         path="/schedule"
-        element={<ScheduleScreen />}
+        element={
+          <RequireAuth>
+            <ScheduleScreen />
+          </RequireAuth>
+        }
       />
       <Route
         path="/confirmation"
-        element={<ConfirmationScreen />}
+        element={
+          <RequireAuth>
+            <ConfirmationScreen />
+          </RequireAuth>
+        }
       />
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>

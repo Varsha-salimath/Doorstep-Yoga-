@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div align="center">
 # 🧘 Doorstep Yoga
  
@@ -86,11 +87,50 @@ npm run dev
 API will start at `http://localhost:<PORT>` (see `backend/.env`).
  
 ### 3. Run the frontend
+=======
+# Doorstep Yoga
+
+**Your mat. Your space. Our trainer.**
+
+Doorstep Yoga is an on-demand wellness platform that connects users with certified yoga trainers who travel to your home, office, or chosen location for personalized sessions.
+
+## Try the app
+
+👉 **Live URL:** [https://doorstep-yoga7.vercel.app](https://doorstep-yoga7.vercel.app)
+
+## What this project includes
+
+- Mobile-first yoga booking frontend (React + Vite + TypeScript)
+- Backend API (Node.js + Express + TypeScript)
+- Dummy OTP authentication flow for quick testing
+- Trainer discovery, filtering, scheduling, and booking flow
+
+## Tech stack
+
+- **Frontend:** React, TypeScript, Vite, React Router
+- **Backend:** Node.js, Express, TypeScript, Zod
+- **Deployment:** Vercel (frontend)
+
+## Project structure
+
+```text
+yogfit/
+├── frontend/   # UI application
+├── backend/    # API server
+└── README.md
+```
+
+## Quick start
+
+### Frontend
+
+>>>>>>> ced8474 (Update YogFit UI and navigation)
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
+<<<<<<< HEAD
 App will be available at `http://localhost:5173`.
  
 ### Environment Variables
@@ -127,3 +167,13 @@ This project is licensed under the MIT License.
 Built with 🧘 for anyone who'd rather skip the studio commute.
  
 </div>
+=======
+
+### Backend
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+>>>>>>> ced8474 (Update YogFit UI and navigation)
