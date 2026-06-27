@@ -1,24 +1,4 @@
-:root {
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: #2f3730;
-  background-color: #f1f0eb;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-width: 320px;
-  background-color: #f1f0eb;
-}
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Source+Serif+4:wght@400;600;700&display=swap');
 
 #root {
   min-height: 100vh;
