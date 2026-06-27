@@ -395,7 +395,7 @@ function TrainerListingScreen() {
             <button type="button" aria-label="Back to home" onClick={() => navigate('/home')}>
               ←
             </button>
-            <div>
+        <div>
               <p>Current Location</p>
               <h2>New Delhi, India</h2>
             </div>
@@ -431,13 +431,13 @@ function TrainerListingScreen() {
           >
             Refine with Preferences
           </button>
-          <button
-            type="button"
+        <button
+          type="button"
             className="trainer-cta trainer-cta-primary"
             onClick={() => navigate('/group-session')}
-          >
+        >
             Book a Group Session
-          </button>
+        </button>
         </div>
 
         <div className="trainer-list">
@@ -649,7 +649,7 @@ function NotificationIcon({
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M3.5 19.5h17M7 16v-5.5l5-3 5 3V16M10 11.5h4M10 14h4" />
-    </svg>
+                </svg>
   )
 }
 
@@ -877,7 +877,7 @@ function ScheduleScreen() {
           <button type="button" aria-label="Session info">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 10.5v5m0-8.5h.01M12 3.5a8.5 8.5 0 1 1 0 17 8.5 8.5 0 0 1 0-17Z" />
-            </svg>
+                </svg>
           </button>
         </header>
 
@@ -1078,8 +1078,8 @@ function ConfirmationScreen() {
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuClQwm14seM4iYp2PfP6iEERTvH5cQMMoG0VJfAlOZsqYJ9vi_rHxSZm0inyF-96z7yh4keI3Uq8-cD7lIXCyDy4xWGVgI9arBIKztDSZ-tw4Qea0YSJnSjTcoN_8h078aWoa6iVKwgAy_1ZvqTTb-ZTjwUhIRF_WlMCpifarRZTW8Ux5xBX-iNxs8FO2F3tdu3TzjHxjE3DTmAs2xvdlx-WKs57ph60wbp9R6bFV0ep7QKS8z5Qwpq_s4915YsB4RcsQBPN0pU3CM"
               alt="Map preview"
             />
-          </div>
-        </section>
+        </div>
+      </section>
 
         <button type="button" className="proceed-btn" onClick={() => navigate('/home')}>
           Done
