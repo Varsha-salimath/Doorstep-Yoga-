@@ -26,8 +26,7 @@ type Hotspot = {
   variant?: 'preferences-fab'
 }
 
-const stitchScreenUrl = (folder: string) =>
-  `/@fs/C:/Users/IL/Downloads/stitch_yogfit_yoga_booking_platform/stitch_yogfit_yoga_booking_platform/${folder}/code.html`
+const stitchScreenUrl = (folder: string) => `/stitch/${folder}/code.html`
 
 function Screen({
   htmlSrc,
@@ -285,6 +284,97 @@ function OtpScreen() {
           </button>
           {error ? <p>{error}</p> : null}
         </form>
+      </main>
+    </div>
+  )
+}
+
+const ADDRESS_MAP_IMAGE =
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuD_ecwtmRbo4rfbj2C4jUajip2TJOQ2jklCqadsju3mHmu_ecG6FT0FnoQdvb5D_YRc9n7Cc6vXio684ZHGnvgf3tXn6xqAJDHw67kncKGmD36hfww8Q8W7OQUYSSHj5SAvUuxlw4SkGXTNH_GlCuJNYBymw4G7xO5mvSbKiZXRdFl2G23V2fMuQnNpKKSse48TO0I8_a3NRExBq6n-O95p_iczDs6Ui-FMBLTCIp6OAnynuvymPIXUxjsWe333SYB7uQbhHWq8NIo'
+
+function AddressSelectionScreen() {
+  const navigate = useNavigate()
+
+  return (
+    <div className="app-bg">
+      <main className="phone-shell page-shell">
+        <section className="address-shell">
+          <header className="address-header">
+            <div className="address-header-title">
+              <span aria-hidden="true">📍</span>
+              <h1>Set Your Doorstep Yoga Location</h1>
+            </div>
+            <button type="button" aria-label="Close" onClick={() => navigate('/home')}>
+              ✕
+            </button>
+          </header>
+
+          <div className="address-map-wrap">
+            <img className="address-map" src={ADDRESS_MAP_IMAGE} alt="Map preview" />
+            <div className="address-map-gradient" />
+          </div>
+
+          <div className="address-content">
+            <label className="address-search">
+              <span aria-hidden="true">🔍</span>
+              <input type="text" placeholder="Search for area, street name..." />
+            </label>
+
+            <div className="address-sheet">
+              <div className="address-sheet-handle" />
+
+              <button
+                type="button"
+                className="address-detect-btn"
+                onClick={() => navigate('/home')}
+              >
+                <span aria-hidden="true">◎</span>
+                Detect my location
+              </button>
+
+              <p className="address-section-label">Saved Addresses</p>
+
+              <div className="address-list">
+                <button
+                  type="button"
+                  className="address-item"
+                  onClick={() => navigate('/home')}
+                >
+                  <span className="address-icon address-icon-home">🏠</span>
+                  <span className="address-item-copy">
+                    <strong>Home</strong>
+                    <small>B-12, Green Park Main, New Delhi</small>
+                  </span>
+                  <span aria-hidden="true">›</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="address-item"
+                  onClick={() => navigate('/home')}
+                >
+                  <span className="address-icon address-icon-office">💼</span>
+                  <span className="address-item-copy">
+                    <strong>Office</strong>
+                    <small>Cyber City, Phase 2, Gurugram</small>
+                  </span>
+                  <span aria-hidden="true">›</span>
+                </button>
+
+                <button type="button" className="address-item address-item-add">
+                  <span className="address-icon address-icon-add">+</span>
+                  <span className="address-item-copy">
+                    <strong>Add New Address</strong>
+                  </span>
+                </button>
+              </div>
+
+              <button type="button" className="address-manual-link">
+                Enter Address Manually
+              </button>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   )
@@ -1130,27 +1220,7 @@ export default function App() {
         path="/address"
         element={
           <RequireAuth>
-            <Screen
-              htmlSrc={stitchScreenUrl('address_selection')}
-              alt="Address Selection"
-              hotspots={[
-                {
-                  to: '/home',
-                  label: 'Detect location',
-                  style: { left: '10%', right: '10%', top: '49%', height: '8%' },
-                },
-                {
-                  to: '/home',
-                  label: 'Home address',
-                  style: { left: '10%', right: '10%', top: '62%', height: '10%' },
-                },
-                {
-                  to: '/home',
-                  label: 'Office address',
-                  style: { left: '10%', right: '10%', top: '72%', height: '10%' },
-                },
-              ]}
-            />
+            <AddressSelectionScreen />
           </RequireAuth>
         }
       />

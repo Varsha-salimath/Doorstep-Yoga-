@@ -1,0 +1,348 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Trainer Profile | Doorstep Yoga</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Source+Serif+4:opsz,wght@8..60,500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Shared Style Guidance Mapping -->
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .breath-animation {
+            animation: breath 8s ease-in-out infinite;
+        }
+        @keyframes breath {
+            0%, 100% { transform: scale(1); opacity: 0.05; }
+            50% { transform: scale(1.1); opacity: 0.1; }
+        }
+    </style>
+<!-- Tailwind Config Injection -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "error": "#ba1a1a",
+                "on-primary-fixed": "#0f1f12",
+                "on-tertiary-fixed-variant": "#574500",
+                "on-secondary-fixed-variant": "#703720",
+                "on-error": "#ffffff",
+                "surface-container-high": "#eae8e3",
+                "surface-container-low": "#f5f3ee",
+                "on-secondary-container": "#7a3e27",
+                "on-error-container": "#93000a",
+                "background": "#fbf9f4",
+                "on-background": "#1b1c19",
+                "primary-container": "#677967",
+                "outline": "#747872",
+                "inverse-primary": "#b8ccb7",
+                "inverse-on-surface": "#f2f1ec",
+                "inverse-surface": "#30312e",
+                "outline-variant": "#c3c8c0",
+                "on-primary": "#ffffff",
+                "secondary": "#8d4d35",
+                "surface-container": "#f0eee9",
+                "on-surface": "#1b1c19",
+                "tertiary-fixed": "#ffe088",
+                "surface-container-lowest": "#ffffff",
+                "on-primary-fixed-variant": "#3a4b3b",
+                "on-secondary": "#ffffff",
+                "surface-bright": "#fbf9f4",
+                "surface-variant": "#e4e2dd",
+                "primary-fixed": "#d4e8d2",
+                "surface": "#fbf9f4",
+                "primary-fixed-dim": "#b8ccb7",
+                "on-secondary-fixed": "#380d00",
+                "tertiary-fixed-dim": "#e9c349",
+                "on-tertiary-fixed": "#241a00",
+                "secondary-container": "#ffad8f",
+                "on-primary-container": "#f7fff3",
+                "on-tertiary-container": "#4e3d00",
+                "on-tertiary": "#ffffff",
+                "surface-tint": "#516352",
+                "primary": "#4e604f",
+                "tertiary-container": "#cca72f",
+                "surface-container-highest": "#e4e2dd",
+                "surface-dim": "#dbdad5",
+                "secondary-fixed": "#ffdbce",
+                "on-surface-variant": "#434842",
+                "tertiary": "#735c00",
+                "error-container": "#ffdad6",
+                "secondary-fixed-dim": "#ffb59a"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "container-padding-mobile": "20px",
+                "gutter": "16px",
+                "section-gap": "48px",
+                "base": "8px",
+                "container-padding-desktop": "64px"
+            },
+            "fontFamily": {
+                "display-lg-mobile": ["Source Serif 4"],
+                "headline-sm": ["Source Serif 4"],
+                "body-lg": ["Plus Jakarta Sans"],
+                "display-lg": ["Source Serif 4"],
+                "body-md": ["Plus Jakarta Sans"],
+                "headline-md": ["Source Serif 4"],
+                "label-md": ["Plus Jakarta Sans"],
+                "label-sm": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                "display-lg-mobile": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed antialiased">
+<!-- Top AppBar (Mobile/Web Header) -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-container-padding-mobile py-base bg-background/80 backdrop-blur-md transition-all duration-300">
+<div class="flex items-center gap-3">
+<button class="p-2 hover:bg-surface-container rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm-mobile md:text-headline-sm text-primary">Trainer Profile</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">share</span>
+</button>
+<button class="p-2 hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">favorite</span>
+</button>
+</div>
+</header>
+<main class="pb-32">
+<!-- Hero Section: Trainer Photo & Identity -->
+<section class="relative w-full h-[530px] md:h-[618px] overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10"></div>
+<img class="w-full h-full object-cover" data-alt="A professional, high-end portrait of a yoga instructor in a serene, sun-drenched minimalist studio. She is sitting in a peaceful meditative pose on a high-quality sage green yoga mat. The lighting is soft and natural, emphasizing a calm and breathable atmosphere. The background features light wood floors and large windows showing blurred soft greenery, perfectly aligning with the organic minimalism brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTYLSJ2ZW2JUogq7mFoDbF4wXEK9TX5GhC_1ZJAGOx99UsJXm4MM5zHusdyyg6MLlnQp6QH1s4cSyLm6B_8nhOOfLUGwRxKVO8Bp1u24dPC8MDXlTkgI5QdBzRRhOi5qABgoJlzLHbGw2p3rBm5hjWAOmXvAZ-Ej2xKcdBzhG4WgbA6pNV23TTxcmMa-6X_IcybpQsllv2GgizzYI9FgmztnqvGLx-8DDsfgZ3ZATpbcgPvwmNPXYUghIBpswYFv2qKw617lNhcMo">
+<div class="absolute bottom-0 left-0 w-full px-container-padding-mobile md:px-container-padding-desktop pb-base z-20">
+<div class="flex flex-col gap-2 max-w-2xl">
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container-lowest text-primary text-label-sm font-label-sm rounded-full shadow-sm">Verified Trainer</span>
+<span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed text-label-sm font-label-sm rounded-full shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined !text-[14px]">star</span>
+                            4.9 (124 reviews)
+                        </span>
+</div>
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-background">Maya Thompson</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Senior Yoga &amp; Mindfulness Facilitator</p>
+</div>
+</div>
+</section>
+<div class="max-w-7xl mx-auto px-container-padding-mobile md:px-container-padding-desktop grid grid-cols-1 lg:grid-cols-12 gap-section-gap mt-gutter">
+<!-- Left Column: Details & Bio -->
+<div class="lg:col-span-7 flex flex-col gap-section-gap">
+<!-- About Me -->
+<article class="flex flex-col gap-gutter">
+<h3 class="font-headline-sm text-headline-sm text-primary border-b border-outline-variant pb-base">About Me</h3>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+                        With over a decade of practice and eight years of teaching, I believe yoga is more than just movement—it's a path to inner clarity and resilience. My approach blends the precision of traditional Hatha with the fluid creativity of Vinyasa flow, always grounded in intentional breath work.
+                    </p>
+</article>
+<!-- Expertise Bento -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Specialties -->
+<div class="p-6 bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] border border-surface-variant/50">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-secondary p-2 bg-secondary-fixed rounded-lg">spa</span>
+<h4 class="font-label-md text-label-md text-primary uppercase tracking-wider">Specialties</h4>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1.5 bg-surface-container text-on-surface-variant text-label-sm rounded-lg">Hatha Yoga</span>
+<span class="px-3 py-1.5 bg-surface-container text-on-surface-variant text-label-sm rounded-lg">Ashtanga</span>
+<span class="px-3 py-1.5 bg-surface-container text-on-surface-variant text-label-sm rounded-lg">Yoga Nidra</span>
+<span class="px-3 py-1.5 bg-surface-container text-on-surface-variant text-label-sm rounded-lg">Pranayama</span>
+</div>
+</div>
+<!-- Certifications -->
+<div class="p-6 bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] border border-surface-variant/50">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-tertiary p-2 bg-tertiary-fixed rounded-lg">verified</span>
+<h4 class="font-label-md text-label-md text-primary uppercase tracking-wider">Certifications</h4>
+</div>
+<ul class="flex flex-col gap-2">
+<li class="flex items-center gap-2 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-primary">check_circle</span>
+                                RYT 500 Yoga Alliance
+                            </li>
+<li class="flex items-center gap-2 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-primary">check_circle</span>
+                                MBSR Certified (Mindfulness)
+                            </li>
+</ul>
+</div>
+</div>
+<!-- Testimonials Carousel -->
+<section class="flex flex-col gap-gutter">
+<div class="flex justify-between items-end">
+<h3 class="font-headline-sm text-headline-sm text-primary">What Students Say</h3>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded-full hover:bg-surface-variant transition-colors" onclick="scrollCarousel(-1)">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-2 border border-outline-variant rounded-full hover:bg-surface-variant transition-colors" onclick="scrollCarousel(1)">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="flex gap-gutter overflow-x-auto hide-scrollbar snap-x snap-mandatory py-4 px-1" id="testimonial-carousel">
+<!-- Testimonial 1 -->
+<div class="min-w-[300px] md:min-w-[400px] snap-start bg-white p-6 rounded-xl shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col gap-4">
+<div class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-md text-on-surface-variant italic">"Maya's sessions are a highlight of my week. Her voice is incredibly calming and her adjustments are so precise."</p>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center font-bold text-primary">A</div>
+<span class="font-label-md text-on-surface">Ananya S.</span>
+</div>
+</div>
+<!-- Testimonial 2 -->
+<div class="min-w-[300px] md:min-w-[400px] snap-start bg-white p-6 rounded-xl shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col gap-4">
+<div class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-md text-on-surface-variant italic">"I've tried many instructors, but Maya's focus on pranayama changed how I handle stress at my job. Truly life-changing."</p>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center font-bold text-secondary">R</div>
+<span class="font-label-md text-on-surface">Rohan K.</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Quick Stats / Sticky Card on Desktop -->
+<aside class="lg:col-span-5 relative">
+<div class="lg:sticky lg:top-32 flex flex-col gap-gutter">
+<!-- Session Stats Card -->
+<div class="p-8 bg-primary-container text-on-primary-container rounded-2xl shadow-lg relative overflow-hidden">
+<!-- Abstract Atmospheric Background -->
+<div class="absolute inset-0 breath-animation bg-white opacity-5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+<h4 class="font-headline-sm mb-6 relative z-10">Quick Stats</h4>
+<div class="grid grid-cols-2 gap-gutter relative z-10">
+<div class="flex flex-col">
+<span class="font-display-lg text-display-lg-mobile !font-bold">1.2k+</span>
+<span class="font-label-sm opacity-80 uppercase tracking-tighter">Hours Taught</span>
+</div>
+<div class="flex flex-col">
+<span class="font-display-lg text-display-lg-mobile !font-bold">98%</span>
+<span class="font-label-sm opacity-80 uppercase tracking-tighter">Satisfaction</span>
+</div>
+<div class="flex flex-col">
+<span class="font-display-lg text-display-lg-mobile !font-bold">8yrs</span>
+<span class="font-label-sm opacity-80 uppercase tracking-tighter">Experience</span>
+</div>
+<div class="flex flex-col">
+<span class="font-display-lg text-display-lg-mobile !font-bold">15+</span>
+<span class="font-label-sm opacity-80 uppercase tracking-tighter">Workshops</span>
+</div>
+</div>
+</div>
+<!-- Upcoming Classes Card -->
+<div class="p-6 bg-surface-container-low rounded-2xl border border-surface-variant">
+<h4 class="font-label-md text-primary mb-4 uppercase tracking-widest">Next Open Classes</h4>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center p-3 bg-white rounded-lg hover:shadow-sm transition-shadow cursor-pointer">
+<div>
+<p class="font-label-md text-on-surface">Vinyasa Flow</p>
+<p class="text-label-sm text-on-surface-variant">Tomorrow, 07:00 AM</p>
+</div>
+<span class="material-symbols-outlined text-primary">arrow_forward_ios</span>
+</div>
+<div class="flex justify-between items-center p-3 bg-white rounded-lg hover:shadow-sm transition-shadow cursor-pointer">
+<div>
+<p class="font-label-md text-on-surface">Sunset Hatha</p>
+<p class="text-label-sm text-on-surface-variant">Wed, 06:30 PM</p>
+</div>
+<span class="material-symbols-outlined text-primary">arrow_forward_ios</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Sticky Bottom Bar -->
+<nav class="fixed bottom-0 w-full z-[60] bg-surface-container-lowest shadow-[0px_-4px_20px_0px_rgba(0,0,0,0.08)] px-container-padding-mobile py-gutter md:px-container-padding-desktop">
+<div class="max-w-7xl mx-auto flex items-center justify-between gap-gutter">
+<div class="hidden md:flex flex-col">
+<span class="text-label-sm text-on-surface-variant">Starting at</span>
+<span class="text-headline-sm text-primary font-bold">₹1,200 <span class="text-body-md font-normal text-on-surface-variant">/ session</span></span>
+</div>
+<button class="flex-1 md:flex-initial flex items-center justify-center gap-3 bg-primary text-on-primary px-container-padding-desktop py-4 rounded-xl font-label-md text-label-md hover:opacity-90 active:scale-[0.98] transition-all shadow-[0px_8px_30px_10px_rgba(78,96,79,0.15)]">
+                Check Availability
+                <span class="material-symbols-outlined">event_available</span>
+</button>
+</div>
+</nav>
+<!-- Navigation Overlay logic or Interaction Scripts -->
+<script>
+        function scrollCarousel(direction) {
+            const carousel = document.getElementById('testimonial-carousel');
+            const scrollAmount = 350;
+            carousel.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('bg-background/95', 'shadow-sm');
+                header.classList.remove('bg-background/80');
+            } else {
+                header.classList.remove('bg-background/95', 'shadow-sm');
+                header.classList.add('bg-background/80');
+            }
+        });
+    </script>
+
+
+</body></html>

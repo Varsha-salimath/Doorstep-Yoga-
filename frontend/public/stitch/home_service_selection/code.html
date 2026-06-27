@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Wellness - Home</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Source+Serif+4:opsz,wght@8..60,500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ba1a1a",
+                    "on-primary-fixed": "#0f1f12",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "on-secondary-fixed-variant": "#703720",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#eae8e3",
+                    "surface-container-low": "#f5f3ee",
+                    "on-secondary-container": "#7a3e27",
+                    "on-error-container": "#93000a",
+                    "background": "#fbf9f4",
+                    "on-background": "#1b1c19",
+                    "primary-container": "#677967",
+                    "outline": "#747872",
+                    "inverse-primary": "#b8ccb7",
+                    "inverse-on-surface": "#f2f1ec",
+                    "inverse-surface": "#30312e",
+                    "outline-variant": "#c3c8c0",
+                    "on-primary": "#ffffff",
+                    "secondary": "#8d4d35",
+                    "surface-container": "#f0eee9",
+                    "on-surface": "#1b1c19",
+                    "tertiary-fixed": "#ffe088",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#3a4b3b",
+                    "on-secondary": "#ffffff",
+                    "surface-bright": "#fbf9f4",
+                    "surface-variant": "#e4e2dd",
+                    "primary-fixed": "#d4e8d2",
+                    "surface": "#fbf9f4",
+                    "primary-fixed-dim": "#b8ccb7",
+                    "on-secondary-fixed": "#380d00",
+                    "tertiary-fixed-dim": "#e9c349",
+                    "on-tertiary-fixed": "#241a00",
+                    "secondary-container": "#ffad8f",
+                    "on-primary-container": "#f7fff3",
+                    "on-tertiary-container": "#4e3d00",
+                    "on-tertiary": "#ffffff",
+                    "surface-tint": "#516352",
+                    "primary": "#4e604f",
+                    "tertiary-container": "#cca72f",
+                    "surface-container-highest": "#e4e2dd",
+                    "surface-dim": "#dbdad5",
+                    "secondary-fixed": "#ffdbce",
+                    "on-surface-variant": "#434842",
+                    "tertiary": "#735c00",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed-dim": "#ffb59a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-padding-mobile": "20px",
+                    "gutter": "16px",
+                    "section-gap": "48px",
+                    "base": "8px",
+                    "container-padding-desktop": "64px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["\"Source Serif 4\""],
+                    "headline-sm": ["\"Source Serif 4\""],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "display-lg": ["\"Source Serif 4\""],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "headline-md": ["\"Source Serif 4\""],
+                    "label-md": ["Plus Jakarta Sans"],
+                    "label-sm": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        @media (min-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar (Zepto-style Address Bar) -->
+<header class="bg-background fixed top-0 w-full z-50 flex justify-between items-center px-container-padding-mobile py-base md:px-container-padding-desktop">
+<div class="flex items-center gap-2 overflow-hidden">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Current Location</span>
+<span class="font-headline-sm text-headline-sm-mobile md:text-headline-sm truncate text-primary">New Delhi, India</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<main class="pt-20 pb-24 px-container-padding-mobile md:px-container-padding-desktop max-w-[1200px] mx-auto">
+<!-- Hero Carousel (Offers) -->
+<section class="mt-4 mb-section-gap">
+<div class="relative overflow-hidden rounded-[24px] aspect-[16/9] md:aspect-[21/9] group">
+<div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent z-10 flex flex-col justify-center px-8 md:px-16 text-on-primary">
+<span class="font-label-md text-label-md bg-white/20 backdrop-blur-md w-fit px-3 py-1 rounded-full mb-4">Limited Time Offer</span>
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-2 max-w-md">50% off your first 1-on-1 session</h2>
+<p class="font-body-md text-body-md opacity-90 mb-6 max-w-sm">Experience personalized wellness with our expert practitioners from the comfort of home.</p>
+<button class="bg-surface-container-lowest text-primary font-bold px-6 py-3 rounded-xl w-fit active:scale-95 transition-transform">Book Now</button>
+</div>
+<div class="absolute inset-0 w-full h-full">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A serene, high-end minimalist yoga studio with soft morning light streaming through large windows. A single person is seen in a calm meditative pose on a premium mat. The aesthetic is organic minimalism with soft sage green and cream tones, creating a breathable and grounded atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNmKij8fX8ptmRD8FoMEJcRtCbPy9TMfsZHOLZWwQ-3x0JrmGZkQuVzcSFNZ3bwQWJsjMZY6XE6Frh3ZU0t-x0ZdX1rvPVvv42r4X_3sV9uzdY4RSpE_8VtxwusayDfGUiR83QH83-eMWRBjs8T26MIyCbQv_GVs2D0Q4gvUnYb_Zs-XE_6rLRko0R23zVqfnVxboMPEJdBtwLKeccxKcf_RWdcJijaLo41te8UBa6_HgeM3fZG7LQtnQCKOB1cMMp_byNrzP3uyE')"></div>
+</div>
+<!-- Carousel Dots -->
+<div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+<span class="w-8 h-1.5 rounded-full bg-on-primary"></span>
+<span class="w-2 h-1.5 rounded-full bg-on-primary/40"></span>
+<span class="w-2 h-1.5 rounded-full bg-on-primary/40"></span>
+</div>
+</div>
+</section>
+<!-- Services Grid -->
+<section class="mb-section-gap">
+<div class="flex items-center justify-between mb-gutter">
+<h3 class="font-headline-md text-headline-md text-on-surface">Our Services</h3>
+<button class="text-primary font-semibold hover:underline">View All</button>
+</div>
+<div class="bento-grid">
+<!-- 1-on-1 Yoga -->
+<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-primary-fixed transition-colors duration-300 cursor-pointer">
+<div class="w-16 h-16 rounded-2xl bg-primary-fixed group-hover:bg-primary-container transition-colors flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary-container text-4xl" data-icon="self_improvement">self_improvement</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm-mobile text-primary mb-1">1-on-1 Yoga</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Personalized flows</p>
+</div>
+<!-- Prenatal Yoga -->
+<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-secondary-fixed transition-colors duration-300 cursor-pointer">
+<div class="w-16 h-16 rounded-2xl bg-secondary-fixed group-hover:bg-secondary-container transition-colors flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-secondary group-hover:text-on-secondary-container text-4xl" data-icon="pregnant_woman">pregnant_woman</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm-mobile text-secondary mb-1">Prenatal Yoga</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Gentle &amp; Safe</p>
+</div>
+<!-- Couples Yoga -->
+<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-tertiary-fixed transition-colors duration-300 cursor-pointer">
+<div class="w-16 h-16 rounded-2xl bg-tertiary-fixed group-hover:bg-tertiary-container transition-colors flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-tertiary group-hover:text-on-tertiary-container text-4xl" data-icon="favorite">favorite</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm-mobile text-tertiary mb-1">Couples Yoga</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Bond &amp; Breath</p>
+</div>
+<!-- Therapy Yoga -->
+<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-primary-fixed transition-colors duration-300 cursor-pointer">
+<div class="w-16 h-16 rounded-2xl bg-primary-fixed group-hover:bg-primary-container transition-colors flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary-container text-4xl" data-icon="healing">healing</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm-mobile text-primary mb-1">Therapy Yoga</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Healing focus</p>
+</div>
+<!-- Group Sessions -->
+<div class="col-span-2 md:col-span-1 bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-primary-fixed transition-colors duration-300 cursor-pointer">
+<div class="w-16 h-16 rounded-2xl bg-primary-fixed group-hover:bg-primary-container transition-colors flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary-container text-4xl" data-icon="groups">groups</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm-mobile text-primary mb-1">Group Sessions</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Community wellness</p>
+</div>
+<!-- Custom Request (The "Breathable" add-on) -->
+<div class="hidden md:flex bg-surface-container-high p-6 rounded-[24px] border-2 border-dashed border-outline-variant flex-col items-center justify-center text-center hover:bg-white transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-on-surface-variant text-4xl mb-2" data-icon="add_circle">add_circle</span>
+<h4 class="font-label-md text-label-md text-on-surface-variant">Request Custom Service</h4>
+</div>
+</div>
+</section>
+<!-- Recommended Mentors -->
+<section class="mb-section-gap">
+<div class="flex items-center justify-between mb-gutter">
+<h3 class="font-headline-md text-headline-md text-on-surface">Top Mentors</h3>
+<button class="text-primary font-semibold hover:underline">View All</button>
+</div>
+<div class="flex gap-gutter overflow-x-auto hide-scrollbar pb-4">
+<!-- Mentor Card 1 -->
+<div class="min-w-[280px] bg-surface-container-lowest p-4 rounded-[20px] shadow-sm flex flex-col gap-3 group">
+<div class="relative rounded-xl overflow-hidden aspect-square">
+<div class="w-full h-full bg-cover bg-center" data-alt="A portrait of a serene yoga instructor with a gentle smile, dressed in earthy-toned activewear. The lighting is soft and natural, typical of a professional studio portrait. The background is a clean, textured off-white wall with a single potted plant for an organic minimal feel." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDxOvBeCOKeWkQTX2rCUclEBML5LAxRI5BNNW4L4GyK5a-HiSRg01dVukkQyBwzqwCdKcRda9ArpjlEmuJ1LwcB_hkTSyc8yeReVCs5Z4in1AsNgPq0iNvjKWrtnIr273zrdAAXxWr170QSaMo5Siw_bl9xUd6ojuJ4JIrvDUqQXkHbcAsr2K1km8HHGCsy3HGAHIogHR-5lK45Neq1HMU3EkQtXs0jBGOrKvpkI8LXlybxxZvMhHuKVpo6ySIfVYBJC2DLm69j6Kw')"></div>
+<div class="absolute top-2 right-2 bg-surface-container-lowest/90 px-2 py-1 rounded-full text-[10px] font-bold text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span> 4.9
+                        </div>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface">Ishita Kapur</h5>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Vinyasa &amp; Hatha Expert</p>
+</div>
+</div>
+<!-- Mentor Card 2 -->
+<div class="min-w-[280px] bg-surface-container-lowest p-4 rounded-[20px] shadow-sm flex flex-col gap-3">
+<div class="relative rounded-xl overflow-hidden aspect-square">
+<div class="w-full h-full bg-cover bg-center" data-alt="A professional photo of a calm, focused yoga mentor standing in a bright studio environment. The aesthetic is clean, high-end, and minimalist, featuring soft lighting and a warm color palette of terracottas and creams. The mentor exudes confidence and tranquility." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBYTNXDhEq74jfJFFMQ5GKdMK2J5HyT13wNgJFEZiS0boSR8x5n4e0OwFj0KL2FeQa1cfNt_xg61NKMP-6CwHpCdRiFxALsBy5f24zPx5T5Mfl9YgkMcWk56sIrTLJBzCgkvxKMNG6DBXHK6tk4Z7MwjfyoHKQZXhMDsR6_BAG4_YBA6IzI3SLLryesu6MGiMjiTAAQcBh0IxrkW7ZnZyp4LutIrZlKnpO1CMCBPW5iEPG8TLoOqtl_TVsa5bXzanmhgHkVODMbmgs')"></div>
+<div class="absolute top-2 right-2 bg-surface-container-lowest/90 px-2 py-1 rounded-full text-[10px] font-bold text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span> 4.8
+                        </div>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface">Arjun Mehta</h5>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Therapy &amp; Healing</p>
+</div>
+</div>
+<!-- Mentor Card 3 -->
+<div class="min-w-[280px] bg-surface-container-lowest p-4 rounded-[20px] shadow-sm flex flex-col gap-3">
+<div class="relative rounded-xl overflow-hidden aspect-square">
+<div class="w-full h-full bg-cover bg-center" data-alt="A professional headshot of a yoga instructor in a peaceful setting with soft, diffused sunlight. The environment is a minimalist studio with natural textures like wood and linen. The instructor is smiling warmly, looking directly at the camera. The style is premium wellness, grounded and approachable." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCf6_CqHuTdgvEg9XXpxrVmiYKaDC7031MrFSP0Nob8YvCtSSnUj8eEkxwny5J9Z5KIUr4uqO6dOstNbaq1Jc0Rn6uR96qpcJJGUPM9vVTjMf-pbOXLQoaxJNRu2THChdqTW3P_VpBgi4lfJ64eve3AvrqRtq_0PtVJW8C6k5OL7VsyflJ5dw5AXvLcUwqk6fe13W6mAE1UR4KgrAsfmmS5yuN8fgBWcIoGq0QWTHZ9GHbryacrgzleM1tcUYJUyaQ5_xfqgAc4xLE')"></div>
+<div class="absolute top-2 right-2 bg-surface-container-lowest/90 px-2 py-1 rounded-full text-[10px] font-bold text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span> 5.0
+                        </div>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface">Sanya Verma</h5>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Prenatal Specialist</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full flex justify-around items-center px-4 py-3 z-50 bg-surface-container-lowest rounded-t-xl shadow-[0px_-4px_20px_0px_rgba(0,0,0,0.05)] md:hidden">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-150 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home_wellness">home_filled</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-label-sm text-label-sm">Favorites</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Account</span>
+</a>
+</nav>
+<!-- Desktop Navigation (Alternative to Bottom Bar) -->
+<div class="hidden md:flex fixed left-0 top-0 h-full w-20 flex-col items-center py-8 gap-8 bg-surface-container-lowest shadow-lg z-[60]">
+<span class="material-symbols-outlined text-primary text-3xl mb-4" data-icon="spa">spa</span>
+<a class="p-3 rounded-xl bg-primary-container text-on-primary-container shadow-md" href="#"><span class="material-symbols-outlined" data-icon="home_wellness">home_filled</span></a>
+<a class="p-3 rounded-xl text-on-surface-variant hover:bg-surface-variant" href="#"><span class="material-symbols-outlined" data-icon="search">search</span></a>
+<a class="p-3 rounded-xl text-on-surface-variant hover:bg-surface-variant" href="#"><span class="material-symbols-outlined" data-icon="favorite">favorite</span></a>
+<a class="p-3 rounded-xl text-on-surface-variant hover:bg-surface-variant" href="#"><span class="material-symbols-outlined" data-icon="person">person</span></a>
+<div class="mt-auto">
+<a class="p-3 rounded-xl text-on-surface-variant hover:bg-surface-variant" href="#"><span class="material-symbols-outlined" data-icon="settings">settings</span></a>
+</div>
+</div>
+<script>
+        // Simple Interaction logic
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('click', (e) => {
+                if(el.getAttribute('href') === '#') e.preventDefault();
+            });
+        });
+
+        // Sticky header transparency effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md');
+                header.classList.add('bg-white/80', 'backdrop-blur-lg');
+            } else {
+                header.classList.remove('shadow-md');
+                header.classList.remove('bg-white/80', 'backdrop-blur-lg');
+            }
+        });
+    </script>
+</body></html>

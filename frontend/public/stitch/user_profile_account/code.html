@@ -1,0 +1,308 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Account - Doorstep Yoga</title>
+<!-- Google Fonts: Source Serif 4 (Display/Headlines) & Plus Jakarta Sans (Body) -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ba1a1a",
+                    "on-primary-fixed": "#0f1f12",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "on-secondary-fixed-variant": "#703720",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#eae8e3",
+                    "surface-container-low": "#f5f3ee",
+                    "on-secondary-container": "#7a3e27",
+                    "on-error-container": "#93000a",
+                    "background": "#fbf9f4",
+                    "on-background": "#1b1c19",
+                    "primary-container": "#677967",
+                    "outline": "#747872",
+                    "inverse-primary": "#b8ccb7",
+                    "inverse-on-surface": "#f2f1ec",
+                    "inverse-surface": "#30312e",
+                    "outline-variant": "#c3c8c0",
+                    "on-primary": "#ffffff",
+                    "secondary": "#8d4d35",
+                    "surface-container": "#f0eee9",
+                    "on-surface": "#1b1c19",
+                    "tertiary-fixed": "#ffe088",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#3a4b3b",
+                    "on-secondary": "#ffffff",
+                    "surface-bright": "#fbf9f4",
+                    "surface-variant": "#e4e2dd",
+                    "primary-fixed": "#d4e8d2",
+                    "surface": "#fbf9f4",
+                    "primary-fixed-dim": "#b8ccb7",
+                    "on-secondary-fixed": "#380d00",
+                    "tertiary-fixed-dim": "#e9c349",
+                    "on-tertiary-fixed": "#241a00",
+                    "secondary-container": "#ffad8f",
+                    "on-primary-container": "#f7fff3",
+                    "on-tertiary-container": "#4e3d00",
+                    "on-tertiary": "#ffffff",
+                    "surface-tint": "#516352",
+                    "primary": "#4e604f",
+                    "tertiary-container": "#cca72f",
+                    "surface-container-highest": "#e4e2dd",
+                    "surface-dim": "#dbdad5",
+                    "secondary-fixed": "#ffdbce",
+                    "on-surface-variant": "#434842",
+                    "tertiary": "#735c00",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed-dim": "#ffb59a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-padding-mobile": "20px",
+                    "gutter": "16px",
+                    "section-gap": "48px",
+                    "base": "8px",
+                    "container-padding-desktop": "64px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["\"Source Serif 4\""],
+                    "headline-sm": ["\"Source Serif 4\""],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "display-lg": ["\"Source Serif 4\""],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "headline-md": ["\"Source Serif 4\""],
+                    "label-md": ["Plus Jakarta Sans"],
+                    "label-sm": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .soft-shadow {
+            box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+        }
+        .btn-hover-effect:active {
+            transform: scale(0.98);
+            transition: transform 0.1s ease;
+        }
+        /* Custom scrollbar for minimalist feel */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e4e2dd; border-radius: 10px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed antialiased">
+<!-- Top AppBar (Mobile/Web Navigation Cluster) -->
+<header class="bg-background dark:bg-background flex justify-between items-center px-container-padding-mobile py-base w-full z-50 fixed top-0 md:px-container-padding-desktop">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<h1 class="font-headline-sm text-headline-sm-mobile md:text-headline-sm text-primary">New Delhi, India</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 duration-200">notifications</button>
+</div>
+</header>
+<main class="pt-20 pb-24 md:pt-28 max-w-screen-xl mx-auto px-container-padding-mobile md:px-container-padding-desktop">
+<!-- Header / Identity Section -->
+<section class="flex flex-col items-center text-center mb-section-gap animate-in fade-in slide-in-from-bottom-4 duration-700">
+<div class="relative mb-6">
+<div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-surface-container-lowest soft-shadow">
+<img class="w-full h-full object-cover" data-alt="A serene studio portrait of a woman in her 30s with a peaceful expression, her hair softly tied back. The lighting is warm and natural, suggesting a high-end wellness spa environment. The background is a soft-focus minimalist interior with sage green and cream tones, emphasizing a professional yet approachable aesthetic for a premium yoga app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaqb9_-SrJa9SoEJ-V0jAAOolFz6Baczol_qo5FdJjuN-Lp80joZWS38MXC2RGnlxSIZo0pL939eOdkFZPSeJHgFhE4X1lKRudje0_qTwvBKoDPvQAwHBVb9ACmCn47bkrkbgNGoxjYCQAq01hwGHb1tsXAwFL9HbNn0gUrnjMNPsw384F8sBo4tgKQYllY5XT7IQxwgZRXEf2RZemyTVsLH6TXisPkZI9M0at5eiDSa3vuI8qFpU-AH-8f5aOszF63hqDrG0_Kis">
+</div>
+<button class="absolute bottom-1 right-1 bg-primary text-on-primary p-2 rounded-full shadow-lg btn-hover-effect">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</div>
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">Namaste, Alex</h2>
+<div class="flex items-center gap-2 mt-2">
+<span class="bg-primary-fixed text-on-primary-fixed-variant px-3 py-1 rounded-full font-label-sm text-label-sm">Premium Member</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm">Joined June 2023</span>
+</div>
+</section>
+<!-- Bento Grid Styled Menu -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Account Information -->
+<div class="col-span-1 md:col-span-2 lg:col-span-1 bg-surface-container-lowest rounded-xl p-gutter soft-shadow flex flex-col gap-4 border border-surface-variant/50">
+<div class="flex items-center gap-3 pb-2 border-b border-surface-variant">
+<span class="material-symbols-outlined text-secondary">account_circle</span>
+<h3 class="font-headline-sm text-headline-sm-mobile">Profile Essentials</h3>
+</div>
+<button class="flex items-center justify-between group hover:bg-surface-container-low p-2 rounded-lg transition-all duration-300">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">home_pin</span>
+<span class="text-on-surface font-body-md">Saved Addresses</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+<button class="flex items-center justify-between group hover:bg-surface-container-low p-2 rounded-lg transition-all duration-300">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">payments</span>
+<span class="text-on-surface font-body-md">Payment Methods</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+</div>
+<!-- Preferences & Favorites -->
+<div class="col-span-1 bg-surface-container-lowest rounded-xl p-gutter soft-shadow flex flex-col gap-4 border border-surface-variant/50">
+<div class="flex items-center gap-3 pb-2 border-b border-surface-variant">
+<span class="material-symbols-outlined text-tertiary">star</span>
+<h3 class="font-headline-sm text-headline-sm-mobile">Personalization</h3>
+</div>
+<button class="flex items-center justify-between group hover:bg-surface-container-low p-2 rounded-lg transition-all duration-300">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">person_heart</span>
+<span class="text-on-surface font-body-md">Favorite Trainers</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+<button class="flex items-center justify-between group hover:bg-surface-container-low p-2 rounded-lg transition-all duration-300">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">loyalty</span>
+<span class="text-on-surface font-body-md">Packages &amp; Subscriptions</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+</div>
+<!-- Support & Settings -->
+<div class="col-span-1 bg-surface-container-lowest rounded-xl p-gutter soft-shadow flex flex-col gap-4 border border-surface-variant/50">
+<div class="flex items-center gap-3 pb-2 border-b border-surface-variant">
+<span class="material-symbols-outlined text-primary">settings</span>
+<h3 class="font-headline-sm text-headline-sm-mobile">App Support</h3>
+</div>
+<button class="flex items-center justify-between group hover:bg-surface-container-low p-2 rounded-lg transition-all duration-300">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">help_center</span>
+<span class="text-on-surface font-body-md">Help Center</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+<button class="flex items-center justify-between group hover:bg-surface-container-low p-2 rounded-lg transition-all duration-300">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">settings_suggest</span>
+<span class="text-on-surface font-body-md">Settings</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+</div>
+<!-- Referral Bonus Card -->
+<div class="col-span-1 md:col-span-2 lg:col-span-3 relative overflow-hidden bg-primary-container rounded-xl p-6 flex flex-col md:flex-row items-center justify-between text-on-primary-container soft-shadow group">
+
+<div class="relative z-10 flex flex-col gap-2 mb-4 md:mb-0">
+<h4 class="font-headline-sm text-on-primary">Share the Tranquility</h4>
+<p class="font-body-md opacity-90 max-w-md">Refer a friend and both of you get 20% off your next private Hatha session.</p>
+</div>
+<button class="relative z-10 bg-surface-container-lowest text-primary px-8 py-3 rounded-full font-label-md transition-transform active:scale-95 hover:shadow-lg">
+                    Refer a Friend
+                </button>
+</div>
+</div>
+<!-- Logout Button Section -->
+<section class="mt-section-gap mb-12 flex justify-center">
+<button class="flex items-center gap-2 text-error font-label-md px-12 py-3 rounded-xl border border-error/20 hover:bg-error/5 transition-colors active:scale-95">
+<span class="material-symbols-outlined">logout</span>
+                Logout
+            </button>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full flex justify-around items-center px-4 py-3 z-50 bg-surface-container-lowest dark:bg-surface-container-high shadow-[0px_-4px_20px_0px_rgba(0,0,0,0.05)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">home_filled</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-sm text-label-sm">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<span class="font-label-sm text-label-sm">Favorites</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-sm text-label-sm">Account</span>
+</a>
+</nav>
+<!-- Desktop Sidebar Suggestion (If expanded) -->
+<aside class="hidden lg:flex flex-col h-full w-80 fixed left-0 top-0 bg-surface border-r border-surface-variant p-gutter pt-24 z-40">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A close-up high resolution photo of a premium membership badge with subtle gold leaf texture and a sage green border, reflecting a luxury wellness brand's attention to detail." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgZViWGrGNp_-mjZIWF-ESB2998FiyxrhEdYbdJUFj6KePI8taiekUe0enkyZ7ubQ3UOgedOHYmu9j948HDLlLJBZBXXyMQkaUXIDGDYF8CXfLh8LC23WgwgQSit60GlnFN2MlnkVOOJb7xuxJ3KNYqLQMQrMTy0i9yAmL4W69Y_YhHH53bGdP00sLweYi4PE4-pOA0nUzMsbEd6aB_B3NfSoQtz3hOmQpFliAWoCtbRKEDQyP2H2FCbOdS7mAIQzbM4n6jJR82r8">
+</div>
+<div>
+<p class="font-label-md text-on-surface">Alex Morningstar</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Premium Member</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 p-3 rounded-lg bg-secondary-fixed text-on-secondary-fixed font-bold active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">event_upcoming</span>
+<span class="">My Sessions</span>
+</a>
+<a class="flex items-center gap-4 p-3 rounded-lg text-on-surface hover:bg-surface-variant transition-all active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="">Payment Methods</span>
+</a>
+<a class="flex items-center gap-4 p-3 rounded-lg text-on-surface hover:bg-surface-variant transition-all active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">share</span>
+<span class="">Refer a Friend</span>
+</a>
+<a class="flex items-center gap-4 p-3 rounded-lg text-on-surface hover:bg-surface-variant transition-all active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="">Help Center</span>
+</a>
+</nav>
+</aside>
+<script>
+        // Micro-interaction for menu items
+        document.querySelectorAll('.group').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.backgroundColor = 'rgba(234, 232, 227, 0.4)';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.backgroundColor = '';
+            });
+        });
+
+        // Simple Logout Confirmation Logic (UI only)
+        const logoutBtn = document.querySelector('.text-error');
+        logoutBtn.addEventListener('click', () => {
+            if(confirm('Are you sure you want to sign out from your peaceful session?')) {
+                console.log('User logging out...');
+                // In a real app: window.location.href = '/login';
+            }
+        });
+    </script>
+
+
+</body></html>
