@@ -12,7 +12,7 @@ const bookings: Booking[] = []
 const createBookingSchema = z.object({
   phone: z
     .string()
-    .regex(/^[6-9]\d{9}$/, 'Phone must be a valid 10-digit Indian mobile number.'),
+    .regex(/^\d{10}$/, 'Phone must be a valid 10-digit mobile number.'),
   trainerId: z.string().min(1),
   date: z.string().min(1),
   time: z.string().min(1),

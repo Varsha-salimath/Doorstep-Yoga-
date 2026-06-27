@@ -149,7 +149,7 @@ function LoginScreen() {
   const [phone, setPhone] = useState('')
   const [error, setError] = useState('')
   const [isSending, setIsSending] = useState(false)
-  const isValid = /^[6-9]\d{9}$/.test(phone)
+  const isValid = /^\d{10}$/.test(phone)
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault()
@@ -163,7 +163,7 @@ function LoginScreen() {
       const response = await sendOtp(phone)
       // In dummy mode backend can expose OTP for QA.
       if (response.otp) {
-        window.alert(`Demo OTP for ${phone}: ${response.otp}`)
+        window.alert(`Your OTP is ${response.otp}`)
       }
       navigate('/otp')
     } catch (sendError) {
@@ -205,7 +205,7 @@ function OtpScreen() {
   const [phone, setPhone] = useState('')
   const [isVerifying, setIsVerifying] = useState(false)
   const [isResending, setIsResending] = useState(false)
-  const canContinue = useMemo(() => /^\d{6}$/.test(otp), [otp])
+  const canContinue = useMemo(() => /^\d{4}$/.test(otp), [otp])
 
   useEffect(() => {
     const pendingPhone = getPendingPhone()
@@ -244,7 +244,7 @@ function OtpScreen() {
       setError('')
       const response = await resendOtp()
       if (response.otp && phone) {
-        window.alert(`New demo OTP for ${phone}: ${response.otp}`)
+        window.alert(`Your OTP is ${response.otp}`)
       }
     } catch (resendError) {
       const message = resendError instanceof Error ? resendError.message : 'Unable to resend OTP.'
@@ -264,10 +264,10 @@ function OtpScreen() {
         <form onSubmit={onSubmit}>
           <input
             type="text"
-            placeholder="Enter 6-digit OTP"
+            placeholder="Enter 4-digit OTP"
             value={otp}
             onChange={(event) =>
-              setOtp(event.target.value.replace(/\D/g, '').slice(0, 6))
+              setOtp(event.target.value.replace(/\D/g, '').slice(0, 4))
             }
           />
           <button type="submit" disabled={!canContinue || isVerifying}>

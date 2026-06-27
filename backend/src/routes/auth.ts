@@ -9,14 +9,14 @@ export const authRouter = Router()
 const sendOtpSchema = z.object({
   phone: z
     .string()
-    .regex(/^[6-9]\d{9}$/, 'Phone must be a valid 10-digit Indian mobile number.'),
+    .regex(/^\d{10}$/, 'Phone must be a valid 10-digit mobile number.'),
 })
 
 const verifyOtpSchema = z.object({
   phone: z
     .string()
-    .regex(/^[6-9]\d{9}$/, 'Phone must be a valid 10-digit Indian mobile number.'),
-  otp: z.string().regex(/^\d{6}$/, 'OTP must be a 6-digit number.'),
+    .regex(/^\d{10}$/, 'Phone must be a valid 10-digit mobile number.'),
+  otp: z.string().regex(/^\d{4}$/, 'OTP must be a 4-digit number.'),
 })
 
 authRouter.post('/send-otp', (req, res) => {
