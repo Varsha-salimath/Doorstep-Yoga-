@@ -8,6 +8,7 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom'
+import { clearPendingPhone, getPendingPhone, resendOtp, sendOtp, verifyOtp } from './api'
 import './App.css'
 
 type Hotspot = {
@@ -16,39 +17,6 @@ type Hotspot = {
   style: CSSProperties
   action?: 'share'
   variant?: 'preferences-fab'
-}
-
-type PendingOtp = {
-  phone: string
-  otp: string
-  expiresAt: number
-}
-
-const PENDING_OTP_KEY = 'doorstep-yoga-pending-otp'
-const OTP_TTL_MS = 5 * 60 * 1000
-
-function generateOtp() {
-  return Math.floor(100000 + Math.random() * 900000).toString()
-}
-
-function savePendingOtp(data: PendingOtp) {
-  sessionStorage.setItem(PENDING_OTP_KEY, JSON.stringify(data))
-}
-
-function readPendingOtp() {
-  const raw = sessionStorage.getItem(PENDING_OTP_KEY)
-  if (!raw) return null
-  try {
-    const parsed = JSON.parse(raw) as PendingOtp
-    if (!parsed.phone || !parsed.otp || !parsed.expiresAt) return null
-    return parsed
-  } catch {
-    return null
-  }
-}
-
-function clearPendingOtp() {
-  sessionStorage.removeItem(PENDING_OTP_KEY)
 }
 
 const stitchScreenUrl = (folder: string) =>
@@ -180,24 +148,30 @@ function LoginScreen() {
   const navigate = useNavigate()
   const [phone, setPhone] = useState('')
   const [error, setError] = useState('')
+  const [isSending, setIsSending] = useState(false)
   const isValid = /^[6-9]\d{9}$/.test(phone)
 
-  function onSubmit(event: FormEvent) {
+  async function onSubmit(event: FormEvent) {
     event.preventDefault()
     if (!isValid) {
       setError('Enter a valid 10-digit mobile number.')
       return
     }
-
-    const otp = generateOtp()
-    savePendingOtp({
-      phone,
-      otp,
-      expiresAt: Date.now() + OTP_TTL_MS,
-    })
-    setError('')
-    window.alert(`Demo OTP for ${phone}: ${otp}`)
-    navigate('/otp')
+    try {
+      setIsSending(true)
+      setError('')
+      const response = await sendOtp(phone)
+      // In dummy mode backend can expose OTP for QA.
+      if (response.otp) {
+        window.alert(`Demo OTP for ${phone}: ${response.otp}`)
+      }
+      navigate('/otp')
+    } catch (sendError) {
+      const message = sendError instanceof Error ? sendError.message : 'Unable to send OTP.'
+      setError(message)
+    } finally {
+      setIsSending(false)
+    }
   }
 
   return (
@@ -215,7 +189,7 @@ function LoginScreen() {
             }
           />
           <button type="submit" disabled={!isValid}>
-            Send OTP
+            {isSending ? 'Sending...' : 'Send OTP'}
           </button>
           {error ? <p>{error}</p> : null}
         </form>
@@ -229,54 +203,57 @@ function OtpScreen() {
   const [otp, setOtp] = useState('')
   const [error, setError] = useState('')
   const [phone, setPhone] = useState('')
+  const [isVerifying, setIsVerifying] = useState(false)
+  const [isResending, setIsResending] = useState(false)
   const canContinue = useMemo(() => /^\d{6}$/.test(otp), [otp])
 
   useEffect(() => {
-    const pending = readPendingOtp()
-    if (!pending || pending.expiresAt <= Date.now()) {
-      clearPendingOtp()
+    const pendingPhone = getPendingPhone()
+    if (!pendingPhone) {
       navigate('/login', { replace: true })
       return
     }
-    setPhone(pending.phone)
+    setPhone(pendingPhone)
   }, [navigate])
 
-  function onSubmit(event: FormEvent) {
+  async function onSubmit(event: FormEvent) {
     event.preventDefault()
     if (!canContinue) return
-
-    const pending = readPendingOtp()
-    if (!pending || pending.expiresAt <= Date.now()) {
-      clearPendingOtp()
-      setError('OTP expired. Please request a new OTP.')
+    if (!phone) {
+      setError('Session expired. Please request OTP again.')
       navigate('/login', { replace: true })
       return
     }
-
-    if (pending.otp !== otp) {
-      setError('Incorrect OTP. Please try again.')
-      return
+    try {
+      setIsVerifying(true)
+      setError('')
+      await verifyOtp(phone, otp)
+      navigate('/address')
+    } catch (verifyError) {
+      const message =
+        verifyError instanceof Error ? verifyError.message : 'OTP verification failed.'
+      setError(message)
+    } finally {
+      setIsVerifying(false)
     }
-
-    clearPendingOtp()
-    setError('')
-    navigate('/address')
   }
 
-  function resendOtp() {
-    const pending = readPendingOtp()
-    if (!pending) {
+  async function onResendOtp() {
+    try {
+      setIsResending(true)
+      setError('')
+      const response = await resendOtp()
+      if (response.otp && phone) {
+        window.alert(`New demo OTP for ${phone}: ${response.otp}`)
+      }
+    } catch (resendError) {
+      const message = resendError instanceof Error ? resendError.message : 'Unable to resend OTP.'
+      setError(message)
+      clearPendingPhone()
       navigate('/login', { replace: true })
-      return
+    } finally {
+      setIsResending(false)
     }
-    const nextOtp = generateOtp()
-    savePendingOtp({
-      phone: pending.phone,
-      otp: nextOtp,
-      expiresAt: Date.now() + OTP_TTL_MS,
-    })
-    setError('')
-    window.alert(`New demo OTP for ${pending.phone}: ${nextOtp}`)
   }
 
   return (
@@ -293,11 +270,11 @@ function OtpScreen() {
               setOtp(event.target.value.replace(/\D/g, '').slice(0, 6))
             }
           />
-          <button type="submit" disabled={!canContinue}>
-            Verify & Continue
+          <button type="submit" disabled={!canContinue || isVerifying}>
+            {isVerifying ? 'Verifying...' : 'Verify & Continue'}
           </button>
-          <button type="button" onClick={resendOtp}>
-            Resend OTP
+          <button type="button" onClick={onResendOtp} disabled={isResending}>
+            {isResending ? 'Resending...' : 'Resend OTP'}
           </button>
           {error ? <p>{error}</p> : null}
         </form>

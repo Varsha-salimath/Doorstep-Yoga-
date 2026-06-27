@@ -1,0 +1,23 @@
+import dotenv from 'dotenv'
+import { z } from 'zod'
+
+dotenv.config()
+
+const envSchema = z.object({
+  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  PORT: z.coerce.number().int().positive().default(4000),
+  CLIENT_ORIGIN: z.string().url().default('http://localhost:5175'),
+  OTP_TTL_MS: z.coerce.number().int().positive().default(5 * 60 * 1000),
+  OTP_EXPOSE_IN_RESPONSE: z
+    .string()
+    .optional()
+    .transform((value) => value === 'true'),
+})
+
+const parsed = envSchema.safeParse(process.env)
+
+if (!parsed.success) {
+  throw new Error(`Invalid environment configuration: ${parsed.error.message}`)
+}
+
+export const config = parsed.data
