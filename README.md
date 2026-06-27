@@ -1,5 +1,5 @@
 <div align="center">
-# 🧘 Doorstep Yoga
+ 🧘 Doorstep Yoga
  
 ### Your mat. Your space. Our trainer.
  
