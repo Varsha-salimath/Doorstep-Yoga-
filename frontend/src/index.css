@@ -1,14 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Source+Serif+4:wght@400;600;700&display=swap');
 
-html,
-body,
 #root {
-  height: 100%;
-  margin: 0;
-  overflow: hidden;
-  overscroll-behavior: none;
-}
-
-#root {
-  width: 100%;
+  min-height: 100vh;
 }
