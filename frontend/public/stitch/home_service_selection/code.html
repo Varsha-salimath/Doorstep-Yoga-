@@ -148,18 +148,118 @@
     .stitch-embed-nav {
       display: none !important;
     }
+    .hero-carousel {
+      touch-action: pan-y;
+    }
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 420ms ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hero-slide.is-active {
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 2;
+    }
+    .hero-slide-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.02);
+      transition: transform 700ms ease;
+    }
+    .hero-slide.is-active .hero-slide-bg {
+      transform: scale(1);
+    }
+    .hero-slide-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 2rem 2.5rem;
+      background: linear-gradient(to right, rgba(78, 96, 79, 0.8), transparent);
+      color: #fff;
+    }
+    @media (min-width: 768px) {
+      .hero-slide-overlay {
+        padding-left: 4rem;
+        padding-right: 4rem;
+      }
+    }
+    .hero-slide-copy > * {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 420ms ease, transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .hero-slide.is-active .hero-slide-copy > * {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .hero-slide.is-active .hero-slide-copy > *:nth-child(1) {
+      transition-delay: 80ms;
+    }
+    .hero-slide.is-active .hero-slide-copy > *:nth-child(2) {
+      transition-delay: 140ms;
+    }
+    .hero-slide.is-active .hero-slide-copy > *:nth-child(3) {
+      transition-delay: 200ms;
+    }
+    .hero-carousel-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 1rem;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .hero-carousel-dot {
+      width: 0.5rem;
+      height: 0.375rem;
+      border: 0;
+      padding: 0;
+      border-radius: 999px;
+      background: rgba(251, 249, 244, 0.4);
+      cursor: pointer;
+      transition: width 320ms cubic-bezier(0.22, 1, 0.36, 1), background 320ms ease;
+    }
+    .hero-carousel-dot.is-active {
+      width: 2rem;
+      background: #4e604f;
+      box-shadow: inset 0 0 0 1px rgba(251, 249, 244, 0.35);
+    }
+    .hero-cta-animate {
+      animation: hero-cta-pop 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @keyframes hero-cta-pop {
+      0% {
+        transform: scale(0.98);
+        opacity: 0.88;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
   </style>
   </head>
 <body class="bg-background text-on-background font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed" tabindex="-1">
 <!-- TopAppBar (Zepto-style Address Bar) -->
 <header class="bg-background fixed top-0 w-full z-50 flex justify-between items-center px-container-padding-mobile py-base md:px-container-padding-desktop">
-<div class="flex items-center gap-2 overflow-hidden">
+<button type="button" class="flex items-center gap-2 overflow-hidden text-left" data-doorstep-nav="/address">
 <span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
 <div class="flex flex-col">
 <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Current Location</span>
 <span class="font-headline-sm text-headline-sm-mobile md:text-headline-sm truncate text-primary">New Delhi, India</span>
 </div>
-</div>
+</button>
 <div class="flex items-center gap-4">
 <button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container hover:opacity-80 transition-opacity active:scale-95 duration-200" data-doorstep-nav="/notifications">
 <span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
@@ -169,23 +269,59 @@
 <main class="home-scroll-content pt-20 px-container-padding-mobile md:px-container-padding-desktop max-w-[1200px] mx-auto">
 <!-- Hero Carousel (Offers) -->
 <section class="mt-4 mb-section-gap">
-<div class="relative overflow-hidden rounded-[24px] aspect-[16/9] md:aspect-[21/9] group">
-<div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent z-10 flex flex-col justify-center px-8 md:px-16 text-on-primary pb-10">
+<div id="hero-carousel" class="hero-carousel relative overflow-hidden rounded-[24px] aspect-[16/9] md:aspect-[21/9]">
+<!-- Slide 1 -->
+<article class="hero-slide is-active" data-cta="Book Now" data-nav="/trainers?category=1-on-1%20Yoga">
+<div class="hero-slide-bg" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNmKij8fX8ptmRD8FoMEJcRtCbPy9TMfsZHOLZWwQ-3x0JrmGZkQuVzcSFNZ3bwQWJsjMZY6XE6Frh3ZU0t-x0ZdX1rvPVvv42r4X_3sV9uzdY4RSpE_8VtxwusayDfGUiR83QH83-eMWRBjs8T26MIyCbQv_GVs2D0Q4gvUnYb_Zs-XE_6rLRko0R23zVqfnVxboMPEJdBtwLKeccxKcf_RWdcJijaLo41te8UBa6_HgeM3fZG7LQtnQCKOB1cMMp_byNrzP3uyE')"></div>
+<div class="hero-slide-overlay">
+<div class="hero-slide-copy">
 <span class="font-label-md text-label-md bg-white/20 backdrop-blur-md w-fit px-3 py-1 rounded-full mb-4">Limited Time Offer</span>
-<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-2 max-w-md">50% off your first 1-on-1 session</h2>
-<p class="font-body-md text-body-md opacity-90 max-w-sm">Experience personalized wellness with our expert practitioners from the comfort of home.</p>
-</div>
-<div class="absolute inset-0 w-full h-full">
-<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A serene, high-end minimalist yoga studio with soft morning light streaming through large windows. A single person is seen in a calm meditative pose on a premium mat. The aesthetic is organic minimalism with soft sage green and cream tones, creating a breathable and grounded atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNmKij8fX8ptmRD8FoMEJcRtCbPy9TMfsZHOLZWwQ-3x0JrmGZkQuVzcSFNZ3bwQWJsjMZY6XE6Frh3ZU0t-x0ZdX1rvPVvv42r4X_3sV9uzdY4RSpE_8VtxwusayDfGUiR83QH83-eMWRBjs8T26MIyCbQv_GVs2D0Q4gvUnYb_Zs-XE_6rLRko0R23zVqfnVxboMPEJdBtwLKeccxKcf_RWdcJijaLo41te8UBa6_HgeM3fZG7LQtnQCKOB1cMMp_byNrzP3uyE')"></div>
-</div>
-<!-- Carousel Dots -->
-<div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-<span class="w-8 h-1.5 rounded-full bg-on-primary"></span>
-<span class="w-2 h-1.5 rounded-full bg-on-primary/40"></span>
-<span class="w-2 h-1.5 rounded-full bg-on-primary/40"></span>
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-2 max-w-md">50% OFF Your First 1-on-1 Session</h2>
+<p class="font-body-md text-body-md opacity-90 max-w-sm">Experience personalized yoga training from certified experts at your home.</p>
 </div>
 </div>
-<button class="bg-surface-container-lowest text-primary font-bold px-6 py-3 rounded-xl w-fit active:scale-95 transition-transform mt-gutter" data-doorstep-nav="/trainers?category=1-on-1%20Yoga">Book Now</button>
+</article>
+<!-- Slide 2 -->
+<article class="hero-slide" data-cta="Explore Trainers" data-nav="/trainers">
+<div class="hero-slide-bg" data-bg="https://lh3.googleusercontent.com/aida-public/AB6AXuDxOvBeCOKeWkQTX2rCUclEBML5LAxRI5BNNW4L4GyK5a-HiSRg01dVukkQyBwzqwCdKcRda9ArpjlEmuJ1LwcB_hkTSyc8yeReVCs5Z4in1AsNgPq0iNvjKWrtnIr273zrdAAXxWr170QSaMo5Siw_bl9xUd6ojuJ4JIrvDUqQXkHbcAsr2K1km8HHGCsy3HGAHIogHR-5lK45Neq1HMU3EkQtXs0jBGOrKvpkI8LXlybxxZvMhHuKVpo6ySIfVYBJC2DLm69j6Kw"></div>
+<div class="hero-slide-overlay">
+<div class="hero-slide-copy">
+<span class="font-label-md text-label-md bg-white/20 backdrop-blur-md w-fit px-3 py-1 rounded-full mb-4">Featured</span>
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-2 max-w-md">Find Your Perfect Personal Trainer</h2>
+<p class="font-body-md text-body-md opacity-90 max-w-sm">Choose from experienced yoga professionals based on your goals.</p>
+</div>
+</div>
+</article>
+<!-- Slide 3 -->
+<article class="hero-slide" data-cta="Book Morning Session" data-nav="/trainers?category=1-on-1%20Yoga">
+<div class="hero-slide-bg" data-bg="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1200&amp;auto=format&amp;fit=crop&amp;q=80"></div>
+<div class="hero-slide-overlay">
+<div class="hero-slide-copy">
+<span class="font-label-md text-label-md bg-white/20 backdrop-blur-md w-fit px-3 py-1 rounded-full mb-4">Morning Wellness</span>
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-2 max-w-md">Start Your Morning with Yoga</h2>
+<p class="font-body-md text-body-md opacity-90 max-w-sm">Build healthier habits with customized morning wellness sessions.</p>
+</div>
+</div>
+</article>
+<!-- Slide 4 -->
+<article class="hero-slide" data-cta="Start Today" data-nav="/trainers?category=Meditation">
+<div class="hero-slide-bg" data-bg="https://lh3.googleusercontent.com/aida-public/AB6AXuCf6_CqHuTdgvEg9XXpxrVmiYKaDC7031MrFSP0Nob8YvCtSSnUj8eEkxwny5J9Z5KIUr4uqO6dOstNbaq1Jc0Rn6uR96qpcJJGUPM9vVTjMf-pbOXLQoaxJNRu2THChdqTW3P_VpBgi4lfJ64eve3AvrqRtq_0PtVJW8C6k5OL7VsyflJ5dw5AXvLcUwqk6fe13W6mAE1UR4KgrAsfmmS5yuN8fgBWcIoGq0QWTHZ9GHbryacrgzleM1tcUYJUyaQ5_xfqgAc4xLE"></div>
+<div class="hero-slide-overlay">
+<div class="hero-slide-copy">
+<span class="font-label-md text-label-md bg-white/20 backdrop-blur-md w-fit px-3 py-1 rounded-full mb-4">Mindfulness</span>
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-2 max-w-md">Meditation &amp; Stress Relief</h2>
+<p class="font-body-md text-body-md opacity-90 max-w-sm">Relax your mind with guided meditation and breathing exercises.</p>
+</div>
+</div>
+</article>
+<div class="hero-carousel-dots" aria-label="Hero carousel pagination">
+<button type="button" class="hero-carousel-dot is-active" aria-label="Slide 1" aria-current="true"></button>
+<button type="button" class="hero-carousel-dot" aria-label="Slide 2" aria-current="false"></button>
+<button type="button" class="hero-carousel-dot" aria-label="Slide 3" aria-current="false"></button>
+<button type="button" class="hero-carousel-dot" aria-label="Slide 4" aria-current="false"></button>
+</div>
+</div>
+<button id="hero-carousel-cta" type="button" class="bg-surface-container-lowest text-primary font-bold px-6 py-3 rounded-xl w-fit active:scale-95 transition-transform mt-gutter hero-cta-animate" data-doorstep-nav="/trainers?category=1-on-1%20Yoga">Book Now</button>
 </section>
 <!-- Services Grid -->
 <section class="mb-section-gap">
@@ -231,13 +367,40 @@
 <div class="w-16 h-16 rounded-2xl bg-primary-fixed group-hover:bg-primary-container transition-colors flex items-center justify-center mb-4">
 <span class="material-symbols-outlined text-primary group-hover:text-on-primary-container text-4xl" data-icon="groups">groups</span>
 </div>
-<h4 class="font-headline-sm text-headline-sm-mobile text-primary mb-1">Group Sessions</h4>
+<h4 class="font-headline-sm text-headline-sm-mobile text-primary mb-1">Group Yoga</h4>
 <p class="font-label-sm text-label-sm text-on-surface-variant">Community wellness</p>
 </div>
-<!-- Custom Request (The "Breathable" add-on) -->
-<div class="hidden md:flex bg-surface-container-high p-6 rounded-[24px] border-2 border-dashed border-outline-variant flex-col items-center justify-center text-center hover:bg-white transition-colors cursor-pointer">
-<span class="material-symbols-outlined text-on-surface-variant text-4xl mb-2" data-icon="add_circle">add_circle</span>
-<h4 class="font-label-md text-label-md text-on-surface-variant">Request Custom Service</h4>
+<!-- Meditation -->
+<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-secondary-fixed transition-colors duration-300 cursor-pointer" data-doorstep-nav="/trainers?category=Meditation">
+<div class="w-16 h-16 rounded-2xl bg-secondary-fixed group-hover:bg-secondary-container transition-colors flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-secondary group-hover:text-on-secondary-container text-4xl" data-icon="spa">spa</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm-mobile text-secondary mb-1">Meditation</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Calm &amp; clarity</p>
+</div>
+<!-- Weight Loss Yoga -->
+<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-tertiary-fixed transition-colors duration-300 cursor-pointer" data-doorstep-nav="/trainers?session=Weight%20Loss%20Yoga">
+<div class="w-16 h-16 rounded-2xl bg-tertiary-fixed group-hover:bg-tertiary-container transition-colors flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-tertiary group-hover:text-on-tertiary-container text-4xl" data-icon="fitness_center">fitness_center</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm-mobile text-tertiary mb-1">Weight Loss Yoga</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Burn &amp; balance</p>
+</div>
+<!-- Power Yoga -->
+<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-primary-fixed transition-colors duration-300 cursor-pointer" data-doorstep-nav="/trainers?session=Power%20Yoga">
+<div class="w-16 h-16 rounded-2xl bg-primary-fixed group-hover:bg-primary-container transition-colors flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary-container text-4xl" data-icon="bolt">bolt</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm-mobile text-primary mb-1">Power Yoga</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Strength flows</p>
+</div>
+<!-- Kids Yoga -->
+<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-secondary-fixed transition-colors duration-300 cursor-pointer" data-doorstep-nav="/trainers?session=Kids%20Yoga">
+<div class="w-16 h-16 rounded-2xl bg-secondary-fixed group-hover:bg-secondary-container transition-colors flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-secondary group-hover:text-on-secondary-container text-4xl" data-icon="child_care">child_care</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm-mobile text-secondary mb-1">Kids Yoga</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Playful movement</p>
 </div>
 </div>
 </section>
@@ -284,7 +447,7 @@
 </div>
 <div>
 <h5 class="font-label-md text-label-md text-on-surface">Sanya Verma</h5>
-<p class="font-label-sm text-label-sm text-on-surface-variant">Prenatal Specialist</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Mindfulness & Breathwork</p>
 </div>
 </div>
 </div>
@@ -321,6 +484,7 @@
 </div>
 </div>
 <script src="/stitch/embed-nav.js"></script>
+<script src="/stitch/hero-carousel.js"></script>
 <script>
         document.addEventListener('DOMContentLoaded', () => {
             document.body.focus({ preventScroll: true });

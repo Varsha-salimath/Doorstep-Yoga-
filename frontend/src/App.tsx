@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type CSSProperties, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from 'react'
 import {
   NavLink,
   Navigate,
@@ -17,6 +17,39 @@ import {
   sendOtp,
   verifyOtp,
 } from './api'
+import {
+  BookingFlowShell,
+  BookingStickyCta,
+  BookingSuccessScreen,
+  ScheduleScreen,
+} from './bookingFlow'
+import {
+  defaultLocationLabel,
+  defaultTrainerImage,
+  getBookingDetails,
+  type BookingDetails,
+} from './booking'
+import { FavoriteHeart } from './FavoriteHeart'
+import { getFavorites, toggleFavorite, type FavoriteTrainer } from './favorites'
+import {
+  getBookingSessionDraft,
+  saveGroupBookingSession,
+  savePrivateSessionDraft,
+  SESSION_TRAINER_CATEGORY,
+} from './sessionBooking'
+import {
+  featuredTrainer,
+  formatBookingDateFromParts,
+  formatInr,
+  getSelectedTrainer,
+  GROUP_PRICING,
+  saveSelectedTrainer,
+  TRAINER_CATEGORIES,
+  trainers,
+  type Trainer,
+} from './trainers'
+import { ToastHost } from './ToastHost'
+import { showToast } from './toast'
 import './App.css'
 
 type Hotspot = {
@@ -37,6 +70,8 @@ function Screen({
   allowEmbedInteraction = true,
   lockViewport = false,
   cohesiveBottomNav = false,
+  bookingFlow = false,
+  bookingCta,
 }: {
   htmlSrc: string
   alt: string
@@ -45,9 +80,17 @@ function Screen({
   allowEmbedInteraction?: boolean
   lockViewport?: boolean
   cohesiveBottomNav?: boolean
+  bookingFlow?: boolean
+  bookingCta?: { label: string; disabled?: boolean; onClick: () => void }
 }) {
   const navigate = useNavigate()
   const location = useLocation()
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const [embedLoaded, setEmbedLoaded] = useState(false)
+
+  useEffect(() => {
+    setEmbedLoaded(false)
+  }, [htmlSrc, location.pathname])
 
   useEffect(() => {
     async function onEmbedMessage(event: MessageEvent) {
@@ -75,6 +118,21 @@ function Screen({
       if (event.data.type === 'doorstep-logout') {
         clearAuth()
         navigate('/login')
+        return
+      }
+
+      if (event.data.type === 'doorstep-toast' && typeof event.data.message === 'string') {
+        showToast(event.data.message)
+        return
+      }
+
+      if (event.data.type === 'doorstep-favorite-toggle') {
+        const result = toggleFavorite({
+          name: featuredTrainer.name,
+          specialty: featuredTrainer.specialty,
+          image: featuredTrainer.image,
+        })
+        showToast(result === 'added' ? 'Added to Favorites ❤️' : 'Removed from Favorites')
       }
     }
 
@@ -82,20 +140,30 @@ function Screen({
     return () => window.removeEventListener('message', onEmbedMessage)
   }, [navigate])
 
+  useEffect(() => {
+    if (!bookingFlow || !embedLoaded) return
+    iframeRef.current?.contentWindow?.postMessage({ type: 'doorstep-booking-mode' }, '*')
+  }, [bookingFlow, embedLoaded, htmlSrc])
+
   return (
-    <div className={`app-bg ${lockViewport ? 'app-bg-viewport-lock' : ''}`}>
+    <div className={`app-bg ${lockViewport || bookingFlow ? 'app-bg-viewport-lock' : ''}`}>
       <main
-        className={`phone-shell page-shell page-shell-embedded${cohesiveBottomNav ? ' page-shell-cohesive-nav' : ''}`}
+        className={`phone-shell page-shell page-shell-embedded${cohesiveBottomNav ? ' page-shell-cohesive-nav' : ''}${bookingFlow ? ' page-shell-booking-flow' : ''}`}
       >
-        <div className={`screen-wrap ${showBottomNav ? 'screen-wrap-with-nav' : ''}`}>
+        <div
+          className={`screen-wrap ${showBottomNav ? 'screen-wrap-with-nav' : ''}${bookingFlow ? ' screen-wrap-booking-flow' : ''}`}
+        >
           <iframe
+            ref={iframeRef}
             key={`${htmlSrc}-${location.pathname}`}
             src={htmlSrc}
             title={alt}
             className={`screen-embed ${allowEmbedInteraction ? '' : 'screen-embed-no-interaction'}`}
             loading="lazy"
             sandbox="allow-scripts allow-same-origin allow-forms"
+            onLoad={() => setEmbedLoaded(true)}
           />
+          {!embedLoaded ? <div className="embed-loading" aria-hidden="true" /> : null}
           {hotspots?.map((spot, index) => (
             <button
               type="button"
@@ -129,7 +197,14 @@ function Screen({
             </button>
           ))}
         </div>
-        {showBottomNav ? <PersistentBottomNav /> : null}
+        {bookingFlow && bookingCta ? (
+          <BookingStickyCta
+            label={bookingCta.label}
+            disabled={bookingCta.disabled}
+            onClick={bookingCta.onClick}
+          />
+        ) : null}
+        {showBottomNav && !bookingFlow ? <PersistentBottomNav /> : null}
       </main>
     </div>
   )
@@ -420,108 +495,72 @@ function AddressSelectionScreen() {
   )
 }
 
+function TrainerAvatar({ src, name }: { src: string; name: string }) {
+  const [imageSrc, setImageSrc] = useState(src)
+
+  return (
+    <img
+      src={imageSrc}
+      alt={name}
+      onError={() => setImageSrc(defaultTrainerImage)}
+    />
+  )
+}
+
 function TrainerListingScreen() {
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const categories = [
-    'All Trainers',
-    '1-on-1 Yoga',
-    'Prenatal Yoga',
-    'Couples Yoga',
-    'Therapy Yoga',
-    'Meditation',
-  ]
+  const [searchParams, setSearchParams] = useSearchParams()
+  const categories = [...TRAINER_CATEGORIES]
   const [selectedCategory, setSelectedCategory] = useState('All Trainers')
   const categoryFromRoute = searchParams.get('category')
-  const trainers = [
-    {
-      name: 'Ishita Kapur',
-      specialty: 'Vinyasa & Hatha Expert',
-      experience: '8 years experience',
-      category: '1-on-1 Yoga',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuDxOvBeCOKeWkQTX2rCUclEBML5LAxRI5BNNW4L4GyK5a-HiSRg01dVukkQyBwzqwCdKcRda9ArpjlEmuJ1LwcB_hkTSyc8yeReVCs5Z4in1AsNgPq0iNvjKWrtnIr273zrdAAXxWr170QSaMo5Siw_bl9xUd6ojuJ4JIrvDUqQXkHbcAsr2K1km8HHGCsy3HGAHIogHR-5lK45Neq1HMU3EkQtXs0jBGOrKvpkI8LXlybxxZvMhHuKVpo6ySIfVYBJC2DLm69j6Kw',
-    },
-    {
-      name: 'Arjun Mehta',
-      specialty: 'Therapy & Healing',
-      experience: '11 years experience',
-      category: 'Therapy Yoga',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuBYTNXDhEq74jfJFFMQ5GKdMK2J5HyT13wNgJFEZiS0boSR8x5n4e0OwFj0KL2FeQa1cfNt_xg61NKMP-6CwHpCdRiFxALsBy5f24zPx5T5Mfl9YgkMcWk56sIrTLJBzCgkvxKMNG6DBXHK6tk4Z7MwjfyoHKQZXhMDsR6_BAG4_YBA6IzI3SLLryesu6MGiMjiTAAQcBh0IxrkW7ZnZyp4LutIrZlKnpO1CMCBPW5iEPG8TLoOqtl_TVsa5bXzanmhgHkVODMbmgs',
-    },
-    {
-      name: 'Sanya Verma',
-      specialty: 'Mindfulness & Breathwork',
-      experience: '6 years experience',
-      category: 'Meditation',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuCf6_CqHuTdgvEg9XXpxrVmiYKaDC7031MrFSP0Nob8YvCtSSnUj8eEkxwny5J9Z5KIUr4uqO6dOstNbaq1Jc0Rn6uR96qpcJJGUPM9vVTjMf-pbOXLQoaxJNRu2THChdqTW3P_VpBgi4lfJ64eve3AvrqRtq_0PtVJW8C6k5OL7VsyflJ5dw5AXvLcUwqk6fe13W6mAE1UR4KgrAsfmmS5yuN8fgBWcIoGq0QWTHZ9GHbryacrgzleM1tcUYJUyaQ5_xfqgAc4xLE',
-    },
-    {
-      name: 'Maya Nair',
-      specialty: 'Prenatal Yoga Specialist',
-      experience: '9 years experience',
-      category: 'Prenatal Yoga',
-      image:
-        'https://images.unsplash.com/photo-1600618528240-fb9fc964b853?w=600&auto=format&fit=crop&q=80',
-    },
-    {
-      name: 'Rohan Iyer',
-      specialty: 'Couples Flow Coach',
-      experience: '7 years experience',
-      category: 'Couples Yoga',
-      image:
-        'https://images.unsplash.com/photo-1594381898411-846e7d193883?w=600&auto=format&fit=crop&q=80',
-    },
-    {
-      name: 'Neha Rao',
-      specialty: 'Private Alignment Coach',
-      experience: '10 years experience',
-      category: '1-on-1 Yoga',
-      image:
-        'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&auto=format&fit=crop&q=80',
-    },
-    {
-      name: 'Kavya Menon',
-      specialty: 'Prenatal Breath Coach',
-      experience: '5 years experience',
-      category: 'Prenatal Yoga',
-      image:
-        'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&auto=format&fit=crop&q=80',
-    },
-    {
-      name: 'Aman Bedi',
-      specialty: 'Partner Flow Specialist',
-      experience: '8 years experience',
-      category: 'Couples Yoga',
-      image:
-        'https://images.unsplash.com/photo-1599447421416-3414500d18a5?w=600&auto=format&fit=crop&q=80',
-    },
-    {
-      name: 'Priya Dutta',
-      specialty: 'Therapeutic Mobility Coach',
-      experience: '12 years experience',
-      category: 'Therapy Yoga',
-      image:
-        'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&auto=format&fit=crop&q=80',
-    },
-  ]
+  const sessionFromRoute = searchParams.get('session')
 
   useEffect(() => {
+    if (sessionFromRoute) {
+      savePrivateSessionDraft(sessionFromRoute)
+      const mappedCategory = SESSION_TRAINER_CATEGORY[sessionFromRoute] ?? sessionFromRoute
+      if (TRAINER_CATEGORIES.includes(mappedCategory as (typeof TRAINER_CATEGORIES)[number])) {
+        setSelectedCategory(mappedCategory)
+      } else {
+        setSelectedCategory('All Trainers')
+      }
+      return
+    }
+
     if (!categoryFromRoute) {
       setSelectedCategory('All Trainers')
       return
     }
 
-    if (categories.includes(categoryFromRoute)) {
+    if (TRAINER_CATEGORIES.includes(categoryFromRoute as (typeof TRAINER_CATEGORIES)[number])) {
+      savePrivateSessionDraft(categoryFromRoute)
       setSelectedCategory(categoryFromRoute)
     }
-  }, [categoryFromRoute])
+  }, [categoryFromRoute, sessionFromRoute])
+
   const filteredTrainers =
     selectedCategory === 'All Trainers'
       ? trainers
       : trainers.filter((trainer) => trainer.category === selectedCategory)
+
+  function openTrainer(trainer: Trainer) {
+    const sessionDraft = getBookingSessionDraft()
+    if (!sessionDraft || sessionDraft.kind !== 'group') {
+      savePrivateSessionDraft(sessionDraft?.sessionLabel ?? trainer.category)
+    }
+    saveSelectedTrainer(trainer)
+    navigate('/trainer-profile')
+  }
+
+  function selectCategory(category: string) {
+    setSelectedCategory(category)
+    if (category === 'All Trainers') {
+      setSearchParams({})
+      return
+    }
+    savePrivateSessionDraft(category)
+    setSearchParams({ category })
+  }
 
   return (
     <div className="app-bg">
@@ -553,7 +592,7 @@ function TrainerListingScreen() {
               key={category}
               type="button"
               className={selectedCategory === category ? 'active' : ''}
-              onClick={() => setSelectedCategory(category)}
+              onClick={() => selectCategory(category)}
             >
               {category}
             </button>
@@ -583,9 +622,9 @@ function TrainerListingScreen() {
               key={trainer.name}
               type="button"
               className="trainer-card"
-              onClick={() => navigate('/trainer-profile')}
+              onClick={() => openTrainer(trainer)}
             >
-              <img src={trainer.image} alt={trainer.name} />
+              <TrainerAvatar src={trainer.image} name={trainer.name} />
               <div>
                 <h3>{trainer.name}</h3>
                 <p>{trainer.specialty}</p>
@@ -607,24 +646,17 @@ function TrainerListingScreen() {
 
 function FavoritesScreen() {
   const navigate = useNavigate()
-  const favoriteTrainers = [
-    {
-      name: 'Ishita Kapur',
-      specialty: 'Vinyasa & Hatha Expert',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuDxOvBeCOKeWkQTX2rCUclEBML5LAxRI5BNNW4L4GyK5a-HiSRg01dVukkQyBwzqwCdKcRda9ArpjlEmuJ1LwcB_hkTSyc8yeReVCs5Z4in1AsNgPq0iNvjKWrtnIr273zrdAAXxWr170QSaMo5Siw_bl9xUd6ojuJ4JIrvDUqQXkHbcAsr2K1km8HHGCsy3HGAHIogHR-5lK45Neq1HMU3EkQtXs0jBGOrKvpkI8LXlybxxZvMhHuKVpo6ySIfVYBJC2DLm69j6Kw',
-    },
-    {
-      name: 'Sanya Verma',
-      specialty: 'Mindfulness & Breathwork',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuCf6_CqHuTdgvEg9XXpxrVmiYKaDC7031MrFSP0Nob8YvCtSSnUj8eEkxwny5J9Z5KIUr4uqO6dOstNbaq1Jc0Rn6uR96qpcJJGUPM9vVTjMf-pbOXLQoaxJNRu2THChdqTW3P_VpBgi4lfJ64eve3AvrqRtq_0PtVJW8C6k5OL7VsyflJ5dw5AXvLcUwqk6fe13W6mAE1UR4KgrAsfmmS5yuN8fgBWcIoGq0QWTHZ9GHbryacrgzleM1tcUYJUyaQ5_xfqgAc4xLE',
-    },
-  ]
+  const [favoriteTrainers, setFavoriteTrainers] = useState(() => getFavorites())
+
+  function handleToggleFavorite(trainer: FavoriteTrainer) {
+    const result = toggleFavorite(trainer)
+    setFavoriteTrainers(getFavorites())
+    showToast(result === 'added' ? 'Added to Favorites ❤️' : 'Removed from Favorites')
+  }
 
   return (
-    <div className="app-bg">
-      <main className="phone-shell page-shell">
+    <div className="app-bg app-bg-viewport-lock">
+      <main className="phone-shell page-shell page-shell-favorites">
         <section className="favorites-shell">
           <header className="favorites-header">
             <h1>Your Favorites</h1>
@@ -632,29 +664,52 @@ function FavoritesScreen() {
           </header>
 
           <div className="favorites-list">
-            {favoriteTrainers.map((trainer) => (
-              <article key={trainer.name} className="favorite-card">
-                <button
-                  type="button"
-                  className="favorite-open"
-                  onClick={() => navigate('/trainer-profile')}
-                >
-                  <img src={trainer.image} alt={trainer.name} />
-                  <div>
-                    <h2>{trainer.name}</h2>
-                    <p>{trainer.specialty}</p>
-                  </div>
-                  <span>♥</span>
+            {favoriteTrainers.length === 0 ? (
+              <div className="favorites-empty">
+                <p>No favorites yet</p>
+                <span>Save trainers you love for faster booking.</span>
+                <button type="button" onClick={() => navigate('/trainers')}>
+                  Browse Trainers
                 </button>
+              </div>
+            ) : (
+              favoriteTrainers.map((trainer) => (
+              <article key={trainer.name} className="favorite-card">
+                <div className="favorite-open">
+                  <button
+                    type="button"
+                    className="favorite-open-main"
+                    onClick={() => {
+                      const match = trainers.find((item) => item.name === trainer.name)
+                      const selected = match ?? featuredTrainer
+                      saveSelectedTrainer(selected)
+                      navigate('/trainer-profile')
+                    }}
+                  >
+                    <TrainerAvatar src={trainer.image} name={trainer.name} />
+                    <div>
+                      <h2>{trainer.name}</h2>
+                      <p>{trainer.specialty}</p>
+                    </div>
+                  </button>
+                  <FavoriteHeart filled onToggle={() => handleToggleFavorite(trainer)} />
+                </div>
                 <button
                   type="button"
                   className="favorite-book"
-                  onClick={() => navigate('/schedule')}
+                  onClick={() => {
+                    const match = trainers.find((item) => item.name === trainer.name)
+                    const selected = match ?? featuredTrainer
+                    savePrivateSessionDraft(selected.category)
+                    saveSelectedTrainer(selected)
+                    navigate('/schedule')
+                  }}
                 >
                   Book Session
                 </button>
               </article>
-            ))}
+              ))
+            )}
           </div>
         </section>
         <PersistentBottomNav />
@@ -910,21 +965,19 @@ function GroupSessionScreen() {
   const navigate = useNavigate()
   const [members, setMembers] = useState(4)
 
-  const groupPricing: Record<number, number> = {
-    2: 700,
-    4: 1100,
-    6: 1500,
-    8: 1850,
-    10: 2200,
-  }
-
-  const availableCounts = Object.keys(groupPricing).map((value) => Number(value))
-  const totalPrice = groupPricing[members]
+  const availableCounts = Object.keys(GROUP_PRICING).map((value) => Number(value))
+  const totalPrice = GROUP_PRICING[members]
   const perPerson = Math.round(totalPrice / members)
 
+  function continueToSchedule() {
+    saveGroupBookingSession(members, totalPrice)
+    saveSelectedTrainer(featuredTrainer)
+    navigate('/schedule')
+  }
+
   return (
-    <div className="app-bg">
-      <main className="group-shell">
+    <BookingFlowShell ctaLabel="Continue to Schedule" onCtaClick={continueToSchedule}>
+      <main className="group-shell booking-flow-content">
         <header className="group-header">
           <button type="button" aria-label="Back" onClick={() => navigate('/home')}>
             ←
@@ -944,7 +997,7 @@ function GroupSessionScreen() {
               <button
                 key={count}
                 type="button"
-                className={members === count ? 'active' : ''}
+                className={`booking-member-btn${members === count ? ' active' : ''}`}
                 onClick={() => setMembers(count)}
               >
                 {count}
@@ -969,245 +1022,110 @@ function GroupSessionScreen() {
           {availableCounts.map((count) => (
             <p key={count} className={count === members ? 'active' : ''}>
               <span>{count} people</span>
-              <strong>₹{groupPricing[count]}</strong>
+              <strong>₹{GROUP_PRICING[count]}</strong>
             </p>
           ))}
         </section>
-
-        <button type="button" className="show-trainers-btn" onClick={() => navigate('/schedule')}>
-          Continue to Schedule
-        </button>
       </main>
-    </div>
+    </BookingFlowShell>
   )
 }
 
-function ScheduleScreen() {
+function TrainerProfileScreen() {
   const navigate = useNavigate()
-  const [selectedDate, setSelectedDate] = useState(12)
-  const [selectedTime, setSelectedTime] = useState('09:30 AM')
-  const [selectedDuration, setSelectedDuration] = useState(60)
-  const [isRecurring, setIsRecurring] = useState(true)
 
-  const dateRows = [
-    [1, 2],
-    [3, 4, 5, 6, 7, 8, 9],
-    [10, 11, 12, 13, 14, 15, 16],
-    [17, 18, 19, 20],
-  ]
-
-  const morningSlots = ['08:00 AM', '09:30 AM', '11:00 AM']
-  const afternoonSlots = ['01:30 PM', '03:00 PM', '04:30 PM']
-  const eveningSlots = ['06:00 PM', '07:30 PM']
+  useEffect(() => {
+    saveSelectedTrainer(featuredTrainer)
+  }, [])
 
   return (
-    <div className="app-bg">
-      <main className="phone-shell page-shell">
-        <section className="schedule-shell">
-        <header className="schedule-header">
-          <button type="button" aria-label="Back" onClick={() => navigate('/trainer-profile')}>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M14.5 5.5 8 12l6.5 6.5" />
-            </svg>
-          </button>
-          <h1>Schedule Session</h1>
-          <button type="button" aria-label="Session info">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 10.5v5m0-8.5h.01M12 3.5a8.5 8.5 0 1 1 0 17 8.5 8.5 0 0 1 0-17Z" />
-                </svg>
-          </button>
-        </header>
-
-        <section className="calendar-card">
-          <div className="calendar-top">
-            <strong>October 2023</strong>
-            <div>
-              <button type="button" aria-label="Previous month">
-                ‹
-              </button>
-              <button type="button" aria-label="Next month">
-                ›
-              </button>
-            </div>
-          </div>
-
-          <div className="calendar-weekdays">
-            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day) => (
-              <span key={day}>{day}</span>
-            ))}
-          </div>
-
-          <div className="calendar-grid">
-            <span className="muted">26</span>
-            <span className="muted">27</span>
-            <span className="muted">28</span>
-            <span className="muted">29</span>
-            <span className="muted">30</span>
-            {dateRows.flat().map((date) => (
-              <button
-                key={date}
-                type="button"
-                className={selectedDate === date ? 'selected' : ''}
-                onClick={() => setSelectedDate(date)}
-              >
-                {date}
-              </button>
-            ))}
-          </div>
-        </section>
-
-        <section className="time-slots">
-          <h2>Select Time Slot</h2>
-
-          <p>Morning</p>
-          <div className="slot-row">
-            {morningSlots.map((slot) => (
-              <button
-                key={slot}
-                type="button"
-                className={selectedTime === slot ? 'active' : ''}
-                onClick={() => setSelectedTime(slot)}
-              >
-                {slot}
-              </button>
-            ))}
-          </div>
-
-          <p>Afternoon</p>
-          <div className="slot-row">
-            {afternoonSlots.map((slot) => (
-              <button
-                key={slot}
-                type="button"
-                className={selectedTime === slot ? 'active' : ''}
-                onClick={() => setSelectedTime(slot)}
-              >
-                {slot}
-              </button>
-            ))}
-          </div>
-
-          <p>Evening</p>
-          <div className="slot-row">
-            {eveningSlots.map((slot) => (
-              <button
-                key={slot}
-                type="button"
-                className={selectedTime === slot ? 'active' : ''}
-                onClick={() => setSelectedTime(slot)}
-              >
-                {slot}
-              </button>
-            ))}
-          </div>
-        </section>
-
-        <section className="duration-section">
-          <h3>Session Duration</h3>
-          <div className="duration-grid">
-            <button
-              type="button"
-              className={selectedDuration === 60 ? 'duration-active' : ''}
-              onClick={() => setSelectedDuration(60)}
-            >
-              <strong>60</strong>
-              <span>Minutes</span>
-            </button>
-            <button
-              type="button"
-              className={selectedDuration === 90 ? 'duration-active' : ''}
-              onClick={() => setSelectedDuration(90)}
-            >
-              <strong>90</strong>
-              <span>Minutes</span>
-            </button>
-          </div>
-        </section>
-
-        <section className="recurring-card">
-          <div>
-            <h4>Recurring Session</h4>
-            <p>Auto-book 3x per week</p>
-          </div>
-          <button
-            type="button"
-            className={`toggle-btn ${isRecurring ? 'on' : ''}`}
-            aria-label="Toggle recurring session"
-            onClick={() => setIsRecurring((value) => !value)}
-          >
-            <span />
-          </button>
-        </section>
-
-        <section className="pricing-block">
-          <h3>Pricing Breakdown</h3>
-          <div>
-            <p>
-              <span>Session ({selectedDuration} min)</span>
-              <strong>{selectedDuration === 60 ? '₹1,200' : '₹1,700'}</strong>
-            </p>
-            <p>
-              <span>Multi-session Discount</span>
-              <strong className="green">- ₹150</strong>
-            </p>
-            <p>
-              <span>Service Fee</span>
-              <strong>₹50</strong>
-            </p>
-            <p className="total">
-              <span>Total Amount</span>
-              <strong>{selectedDuration === 60 ? '₹1,100' : '₹1,600'}</strong>
-            </p>
-          </div>
-        </section>
-
-        <button type="button" className="proceed-btn" onClick={() => navigate('/confirmation')}>
-          Proceed to Checkout
-        </button>
-        </section>
-        <PersistentBottomNav />
-      </main>
-    </div>
+    <Screen
+      htmlSrc={stitchScreenUrl('trainer_profile_page')}
+      alt="Trainer Profile"
+      showBottomNav={false}
+      allowEmbedInteraction={true}
+      lockViewport={true}
+      bookingFlow={true}
+      bookingCta={{
+        label: 'Check Availability',
+        onClick: () => {
+          const sessionDraft = getBookingSessionDraft()
+          if (!sessionDraft || sessionDraft.kind !== 'group') {
+            savePrivateSessionDraft(sessionDraft?.sessionLabel ?? featuredTrainer.category)
+          }
+          navigate('/schedule')
+        },
+      }}
+    />
   )
 }
 
 function ConfirmationScreen() {
   const navigate = useNavigate()
+  const booking = getBookingDetails()
+  const confirmCardRef = useRef<HTMLElement>(null)
+
+  const today = new Date()
+  const details: BookingDetails = booking ?? {
+    trainerName: getSelectedTrainer().name,
+    trainerImage: getSelectedTrainer().image,
+    dateLabel: formatBookingDateFromParts(12, today.getFullYear(), today.getMonth()),
+    time: '09:30 AM',
+    sessionType: featuredTrainer.category,
+    duration: 60,
+    bookingId: 'DY-DEMO01',
+    totalPaid: formatInr(1100),
+    paymentMethod: 'UPI',
+    locationLabel: defaultLocationLabel,
+  }
+
+  const paymentLabel = details.paymentMethod ?? 'UPI'
+
+  function viewBooking() {
+    confirmCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   return (
-    <div className="app-bg">
-      <main className="phone-shell page-shell">
-        <section className="confirm-shell">
+    <BookingFlowShell ctaLabel="View Booking" onCtaClick={viewBooking}>
+      <section className="confirm-shell booking-flow-content">
         <div className="confirm-badge">✓</div>
         <h1>Booking Confirmed</h1>
         <p>
-          Maya will see you on <strong>Oct 24 at 7:30 AM.</strong>
+          {details.trainerName.split(' ')[0]} will see you on{' '}
+          <strong>
+            {details.dateLabel} at {details.time}.
+          </strong>
         </p>
 
-        <section className="confirm-card">
+        <section ref={confirmCardRef} className="confirm-card">
           <div className="confirm-trainer">
-            <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyFDy8cQteV262jwOYw9XYyns04WgN8rtbIELJySg4AZVLnpweFKPX5lgmkVybupXlHHmDksZ8LQEsOQKK3o_pEvBHHWlt8bQH2wRHuwUGtlwp7PGKMMUIUK0D4OlqZDdLafZ9XK5lJqlfj6vBO37I5CuX2PKxvamC4kT5P0yq7bs_6aJqDT3LXyIPg66Ouo0mNey_2slfugXGh9MrFYem7gmKZNcnN_YGqSn_ckVMrgcW7a7YsBlVMvFJW3b1NMChQFhB3gqOGCY"
-              alt="Maya Sharma"
-            />
+            <img src={details.trainerImage} alt={details.trainerName} />
             <div>
-              <h2>Maya Sharma</h2>
+              <h2>{details.trainerName}</h2>
               <p>★ 4.9 (120+ Sessions)</p>
             </div>
-            <span className="trainer-tags">Yoga Therapy</span>
+            <span className="trainer-tags">{details.sessionType}</span>
           </div>
 
           <div className="confirm-item">
             <strong>Location</strong>
-            <span>Serenity Studio, Hauz Khas, New Delhi</span>
+            <span>{details.locationLabel}</span>
           </div>
           <div className="confirm-item">
             <strong>Date & Time</strong>
-            <span>Thursday, October 24 • 07:30 AM (60 min)</span>
+            <span>
+              {details.dateLabel} • {details.time} ({details.duration} min)
+            </span>
+          </div>
+          <div className="confirm-item">
+            <strong>Booking ID</strong>
+            <span>{details.bookingId}</span>
           </div>
           <div className="confirm-item">
             <strong>Payment Status</strong>
-            <span>₹1,200 Paid via UPI</span>
+            <span>
+              {details.totalPaid} Paid via {paymentLabel}
+            </span>
           </div>
 
           <div className="confirm-map">
@@ -1215,16 +1133,16 @@ function ConfirmationScreen() {
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuClQwm14seM4iYp2PfP6iEERTvH5cQMMoG0VJfAlOZsqYJ9vi_rHxSZm0inyF-96z7yh4keI3Uq8-cD7lIXCyDy4xWGVgI9arBIKztDSZ-tw4Qea0YSJnSjTcoN_8h078aWoa6iVKwgAy_1ZvqTTb-ZTjwUhIRF_WlMCpifarRZTW8Ux5xBX-iNxs8FO2F3tdu3TzjHxjE3DTmAs2xvdlx-WKs57ph60wbp9R6bFV0ep7QKS8z5Qwpq_s4915YsB4RcsQBPN0pU3CM"
               alt="Map preview"
             />
+          </div>
+        </section>
+
+        <div className="confirm-actions">
+          <button type="button" className="confirm-home-btn booking-pressable" onClick={() => navigate('/home')}>
+            Back to Home
+          </button>
         </div>
       </section>
-
-        <button type="button" className="proceed-btn" onClick={() => navigate('/home')}>
-          Done
-        </button>
-        </section>
-        <PersistentBottomNav />
-      </main>
-    </div>
+    </BookingFlowShell>
   )
 }
 
@@ -1246,7 +1164,9 @@ function NotFoundRedirect() {
 
 export default function App() {
   return (
-    <Routes>
+    <>
+      <ToastHost />
+      <Routes>
       <Route path="/" element={<RootRedirect />} />
       <Route
         path="/login"
@@ -1352,12 +1272,7 @@ export default function App() {
         path="/trainer-profile"
         element={
           <RequireAuth>
-            <Screen
-              htmlSrc={stitchScreenUrl('trainer_profile_page')}
-              alt="Trainer Profile"
-              showBottomNav={false}
-              allowEmbedInteraction={true}
-            />
+            <TrainerProfileScreen />
           </RequireAuth>
         }
       />
@@ -1366,6 +1281,14 @@ export default function App() {
         element={
           <RequireAuth>
             <ScheduleScreen />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/booking-success"
+        element={
+          <RequireAuth>
+            <BookingSuccessScreen />
           </RequireAuth>
         }
       />
@@ -1379,5 +1302,6 @@ export default function App() {
       />
       <Route path="*" element={<NotFoundRedirect />} />
     </Routes>
+    </>
   )
 }
