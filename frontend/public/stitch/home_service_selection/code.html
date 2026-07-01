@@ -127,12 +127,30 @@
         }
     </style>
 <style>
+    html {
+      height: 100%;
+      margin: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      background: #fbf9f4;
+    }
     body {
-      min-height: max(884px, 100dvh);
+      margin: 0;
+      min-height: 100%;
+      overflow: visible;
+      background: #fbf9f4;
+    }
+    main.home-scroll-content {
+      padding-bottom: calc(66px + 56px + 24px);
+    }
+    .stitch-embed-nav {
+      display: none !important;
     }
   </style>
   </head>
-<body class="bg-background text-on-background font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<body class="bg-background text-on-background font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed" tabindex="-1">
 <!-- TopAppBar (Zepto-style Address Bar) -->
 <header class="bg-background fixed top-0 w-full z-50 flex justify-between items-center px-container-padding-mobile py-base md:px-container-padding-desktop">
 <div class="flex items-center gap-2 overflow-hidden">
@@ -143,20 +161,19 @@
 </div>
 </div>
 <div class="flex items-center gap-4">
-<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container hover:opacity-80 transition-opacity active:scale-95 duration-200" data-doorstep-nav="/notifications">
 <span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
 </button>
 </div>
 </header>
-<main class="pt-20 pb-24 px-container-padding-mobile md:px-container-padding-desktop max-w-[1200px] mx-auto">
+<main class="home-scroll-content pt-20 px-container-padding-mobile md:px-container-padding-desktop max-w-[1200px] mx-auto">
 <!-- Hero Carousel (Offers) -->
 <section class="mt-4 mb-section-gap">
 <div class="relative overflow-hidden rounded-[24px] aspect-[16/9] md:aspect-[21/9] group">
-<div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent z-10 flex flex-col justify-center px-8 md:px-16 text-on-primary">
+<div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent z-10 flex flex-col justify-center px-8 md:px-16 text-on-primary pb-10">
 <span class="font-label-md text-label-md bg-white/20 backdrop-blur-md w-fit px-3 py-1 rounded-full mb-4">Limited Time Offer</span>
 <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-2 max-w-md">50% off your first 1-on-1 session</h2>
-<p class="font-body-md text-body-md opacity-90 mb-6 max-w-sm">Experience personalized wellness with our expert practitioners from the comfort of home.</p>
-<button class="bg-surface-container-lowest text-primary font-bold px-6 py-3 rounded-xl w-fit active:scale-95 transition-transform">Book Now</button>
+<p class="font-body-md text-body-md opacity-90 max-w-sm">Experience personalized wellness with our expert practitioners from the comfort of home.</p>
 </div>
 <div class="absolute inset-0 w-full h-full">
 <div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A serene, high-end minimalist yoga studio with soft morning light streaming through large windows. A single person is seen in a calm meditative pose on a premium mat. The aesthetic is organic minimalism with soft sage green and cream tones, creating a breathable and grounded atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNmKij8fX8ptmRD8FoMEJcRtCbPy9TMfsZHOLZWwQ-3x0JrmGZkQuVzcSFNZ3bwQWJsjMZY6XE6Frh3ZU0t-x0ZdX1rvPVvv42r4X_3sV9uzdY4RSpE_8VtxwusayDfGUiR83QH83-eMWRBjs8T26MIyCbQv_GVs2D0Q4gvUnYb_Zs-XE_6rLRko0R23zVqfnVxboMPEJdBtwLKeccxKcf_RWdcJijaLo41te8UBa6_HgeM3fZG7LQtnQCKOB1cMMp_byNrzP3uyE')"></div>
@@ -168,16 +185,17 @@
 <span class="w-2 h-1.5 rounded-full bg-on-primary/40"></span>
 </div>
 </div>
+<button class="bg-surface-container-lowest text-primary font-bold px-6 py-3 rounded-xl w-fit active:scale-95 transition-transform mt-gutter" data-doorstep-nav="/trainers?category=1-on-1%20Yoga">Book Now</button>
 </section>
 <!-- Services Grid -->
 <section class="mb-section-gap">
 <div class="flex items-center justify-between mb-gutter">
 <h3 class="font-headline-md text-headline-md text-on-surface">Our Services</h3>
-<button class="text-primary font-semibold hover:underline">View All</button>
+<button class="text-primary font-semibold hover:underline" data-doorstep-nav="/trainers">View All</button>
 </div>
 <div class="bento-grid">
 <!-- 1-on-1 Yoga -->
-<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-primary-fixed transition-colors duration-300 cursor-pointer">
+<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-primary-fixed transition-colors duration-300 cursor-pointer" data-doorstep-nav="/trainers?category=1-on-1%20Yoga">
 <div class="w-16 h-16 rounded-2xl bg-primary-fixed group-hover:bg-primary-container transition-colors flex items-center justify-center mb-4">
 <span class="material-symbols-outlined text-primary group-hover:text-on-primary-container text-4xl" data-icon="self_improvement">self_improvement</span>
 </div>
@@ -185,7 +203,7 @@
 <p class="font-label-sm text-label-sm text-on-surface-variant">Personalized flows</p>
 </div>
 <!-- Prenatal Yoga -->
-<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-secondary-fixed transition-colors duration-300 cursor-pointer">
+<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-secondary-fixed transition-colors duration-300 cursor-pointer" data-doorstep-nav="/trainers?category=Prenatal%20Yoga">
 <div class="w-16 h-16 rounded-2xl bg-secondary-fixed group-hover:bg-secondary-container transition-colors flex items-center justify-center mb-4">
 <span class="material-symbols-outlined text-secondary group-hover:text-on-secondary-container text-4xl" data-icon="pregnant_woman">pregnant_woman</span>
 </div>
@@ -193,7 +211,7 @@
 <p class="font-label-sm text-label-sm text-on-surface-variant">Gentle &amp; Safe</p>
 </div>
 <!-- Couples Yoga -->
-<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-tertiary-fixed transition-colors duration-300 cursor-pointer">
+<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-tertiary-fixed transition-colors duration-300 cursor-pointer" data-doorstep-nav="/trainers?category=Couples%20Yoga">
 <div class="w-16 h-16 rounded-2xl bg-tertiary-fixed group-hover:bg-tertiary-container transition-colors flex items-center justify-center mb-4">
 <span class="material-symbols-outlined text-tertiary group-hover:text-on-tertiary-container text-4xl" data-icon="favorite">favorite</span>
 </div>
@@ -201,7 +219,7 @@
 <p class="font-label-sm text-label-sm text-on-surface-variant">Bond &amp; Breath</p>
 </div>
 <!-- Therapy Yoga -->
-<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-primary-fixed transition-colors duration-300 cursor-pointer">
+<div class="bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-primary-fixed transition-colors duration-300 cursor-pointer" data-doorstep-nav="/trainers?category=Therapy%20Yoga">
 <div class="w-16 h-16 rounded-2xl bg-primary-fixed group-hover:bg-primary-container transition-colors flex items-center justify-center mb-4">
 <span class="material-symbols-outlined text-primary group-hover:text-on-primary-container text-4xl" data-icon="healing">healing</span>
 </div>
@@ -209,7 +227,7 @@
 <p class="font-label-sm text-label-sm text-on-surface-variant">Healing focus</p>
 </div>
 <!-- Group Sessions -->
-<div class="col-span-2 md:col-span-1 bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-primary-fixed transition-colors duration-300 cursor-pointer">
+<div class="col-span-2 md:col-span-1 bg-surface-container-lowest p-6 rounded-[24px] shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)] flex flex-col items-center text-center group hover:bg-primary-fixed transition-colors duration-300 cursor-pointer" data-doorstep-nav="/group-session">
 <div class="w-16 h-16 rounded-2xl bg-primary-fixed group-hover:bg-primary-container transition-colors flex items-center justify-center mb-4">
 <span class="material-symbols-outlined text-primary group-hover:text-on-primary-container text-4xl" data-icon="groups">groups</span>
 </div>
@@ -227,11 +245,11 @@
 <section class="mb-section-gap">
 <div class="flex items-center justify-between mb-gutter">
 <h3 class="font-headline-md text-headline-md text-on-surface">Top Mentors</h3>
-<button class="text-primary font-semibold hover:underline">View All</button>
+<button class="text-primary font-semibold hover:underline" data-doorstep-nav="/trainers">View All</button>
 </div>
 <div class="flex gap-gutter overflow-x-auto hide-scrollbar pb-4">
 <!-- Mentor Card 1 -->
-<div class="min-w-[280px] bg-surface-container-lowest p-4 rounded-[20px] shadow-sm flex flex-col gap-3 group">
+<div class="min-w-[280px] bg-surface-container-lowest p-4 rounded-[20px] shadow-sm flex flex-col gap-3 group cursor-pointer" data-doorstep-nav="/trainer-profile">
 <div class="relative rounded-xl overflow-hidden aspect-square">
 <div class="w-full h-full bg-cover bg-center" data-alt="A portrait of a serene yoga instructor with a gentle smile, dressed in earthy-toned activewear. The lighting is soft and natural, typical of a professional studio portrait. The background is a clean, textured off-white wall with a single potted plant for an organic minimal feel." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDxOvBeCOKeWkQTX2rCUclEBML5LAxRI5BNNW4L4GyK5a-HiSRg01dVukkQyBwzqwCdKcRda9ArpjlEmuJ1LwcB_hkTSyc8yeReVCs5Z4in1AsNgPq0iNvjKWrtnIr273zrdAAXxWr170QSaMo5Siw_bl9xUd6ojuJ4JIrvDUqQXkHbcAsr2K1km8HHGCsy3HGAHIogHR-5lK45Neq1HMU3EkQtXs0jBGOrKvpkI8LXlybxxZvMhHuKVpo6ySIfVYBJC2DLm69j6Kw')"></div>
 <div class="absolute top-2 right-2 bg-surface-container-lowest/90 px-2 py-1 rounded-full text-[10px] font-bold text-primary flex items-center gap-1">
@@ -244,7 +262,7 @@
 </div>
 </div>
 <!-- Mentor Card 2 -->
-<div class="min-w-[280px] bg-surface-container-lowest p-4 rounded-[20px] shadow-sm flex flex-col gap-3">
+<div class="min-w-[280px] bg-surface-container-lowest p-4 rounded-[20px] shadow-sm flex flex-col gap-3 cursor-pointer" data-doorstep-nav="/trainer-profile">
 <div class="relative rounded-xl overflow-hidden aspect-square">
 <div class="w-full h-full bg-cover bg-center" data-alt="A professional photo of a calm, focused yoga mentor standing in a bright studio environment. The aesthetic is clean, high-end, and minimalist, featuring soft lighting and a warm color palette of terracottas and creams. The mentor exudes confidence and tranquility." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBYTNXDhEq74jfJFFMQ5GKdMK2J5HyT13wNgJFEZiS0boSR8x5n4e0OwFj0KL2FeQa1cfNt_xg61NKMP-6CwHpCdRiFxALsBy5f24zPx5T5Mfl9YgkMcWk56sIrTLJBzCgkvxKMNG6DBXHK6tk4Z7MwjfyoHKQZXhMDsR6_BAG4_YBA6IzI3SLLryesu6MGiMjiTAAQcBh0IxrkW7ZnZyp4LutIrZlKnpO1CMCBPW5iEPG8TLoOqtl_TVsa5bXzanmhgHkVODMbmgs')"></div>
 <div class="absolute top-2 right-2 bg-surface-container-lowest/90 px-2 py-1 rounded-full text-[10px] font-bold text-primary flex items-center gap-1">
@@ -257,7 +275,7 @@
 </div>
 </div>
 <!-- Mentor Card 3 -->
-<div class="min-w-[280px] bg-surface-container-lowest p-4 rounded-[20px] shadow-sm flex flex-col gap-3">
+<div class="min-w-[280px] bg-surface-container-lowest p-4 rounded-[20px] shadow-sm flex flex-col gap-3 cursor-pointer" data-doorstep-nav="/trainer-profile">
 <div class="relative rounded-xl overflow-hidden aspect-square">
 <div class="w-full h-full bg-cover bg-center" data-alt="A professional headshot of a yoga instructor in a peaceful setting with soft, diffused sunlight. The environment is a minimalist studio with natural textures like wood and linen. The instructor is smiling warmly, looking directly at the camera. The style is premium wellness, grounded and approachable." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCf6_CqHuTdgvEg9XXpxrVmiYKaDC7031MrFSP0Nob8YvCtSSnUj8eEkxwny5J9Z5KIUr4uqO6dOstNbaq1Jc0Rn6uR96qpcJJGUPM9vVTjMf-pbOXLQoaxJNRu2THChdqTW3P_VpBgi4lfJ64eve3AvrqRtq_0PtVJW8C6k5OL7VsyflJ5dw5AXvLcUwqk6fe13W6mAE1UR4KgrAsfmmS5yuN8fgBWcIoGq0QWTHZ9GHbryacrgzleM1tcUYJUyaQ5_xfqgAc4xLE')"></div>
 <div class="absolute top-2 right-2 bg-surface-container-lowest/90 px-2 py-1 rounded-full text-[10px] font-bold text-primary flex items-center gap-1">
@@ -273,7 +291,7 @@
 </section>
 </main>
 <!-- BottomNavBar -->
-<nav class="fixed bottom-0 w-full flex justify-around items-center px-4 py-3 z-50 bg-surface-container-lowest rounded-t-xl shadow-[0px_-4px_20px_0px_rgba(0,0,0,0.05)] md:hidden">
+<nav class="stitch-embed-nav fixed bottom-0 w-full flex justify-around items-center px-4 py-3 z-50 bg-surface-container-lowest rounded-t-xl shadow-[0px_-4px_20px_0px_rgba(0,0,0,0.05)] md:hidden">
 <a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-150 transition-colors" href="#">
 <span class="material-symbols-outlined" data-icon="home_wellness">home_filled</span>
 <span class="font-label-sm text-label-sm">Home</span>
@@ -302,15 +320,12 @@
 <a class="p-3 rounded-xl text-on-surface-variant hover:bg-surface-variant" href="#"><span class="material-symbols-outlined" data-icon="settings">settings</span></a>
 </div>
 </div>
+<script src="/stitch/embed-nav.js"></script>
 <script>
-        // Simple Interaction logic
-        document.querySelectorAll('a, button').forEach(el => {
-            el.addEventListener('click', (e) => {
-                if(el.getAttribute('href') === '#') e.preventDefault();
-            });
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.focus({ preventScroll: true });
         });
 
-        // Sticky header transparency effect
         window.addEventListener('scroll', () => {
             const header = document.querySelector('header');
             if (window.scrollY > 20) {

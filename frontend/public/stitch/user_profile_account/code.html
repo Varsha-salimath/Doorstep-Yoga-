@@ -116,8 +116,22 @@
         ::-webkit-scrollbar-thumb { background: #e4e2dd; border-radius: 10px; }
     </style>
 <style>
+    html,
     body {
-      min-height: max(884px, 100dvh);
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      overscroll-behavior: none;
+    }
+    body > main {
+      height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+    .stitch-embed-nav {
+      display: none !important;
     }
   </style>
 </head>
@@ -129,7 +143,7 @@
 <h1 class="font-headline-sm text-headline-sm-mobile md:text-headline-sm text-primary">New Delhi, India</h1>
 </div>
 <div class="flex items-center gap-4">
-<button class="material-symbols-outlined text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 duration-200">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 duration-200" data-doorstep-nav="/notifications">notifications</button>
 </div>
 </header>
 <main class="pt-20 pb-24 md:pt-28 max-w-screen-xl mx-auto px-container-padding-mobile md:px-container-padding-desktop">
@@ -157,7 +171,7 @@
 <span class="material-symbols-outlined text-secondary">account_circle</span>
 <h3 class="font-headline-sm text-headline-sm-mobile">Profile Essentials</h3>
 </div>
-<button class="flex items-center justify-between group hover:bg-surface-container-low p-2 rounded-lg transition-all duration-300">
+<button class="flex items-center justify-between group hover:bg-surface-container-low p-2 rounded-lg transition-all duration-300" data-doorstep-nav="/address">
 <div class="flex items-center gap-4">
 <span class="material-symbols-outlined text-on-surface-variant">home_pin</span>
 <span class="text-on-surface font-body-md">Saved Addresses</span>
@@ -178,14 +192,14 @@
 <span class="material-symbols-outlined text-tertiary">star</span>
 <h3 class="font-headline-sm text-headline-sm-mobile">Personalization</h3>
 </div>
-<button class="flex items-center justify-between group hover:bg-surface-container-low p-2 rounded-lg transition-all duration-300">
+<button class="flex items-center justify-between group hover:bg-surface-container-low p-2 rounded-lg transition-all duration-300" data-doorstep-nav="/favorites">
 <div class="flex items-center gap-4">
 <span class="material-symbols-outlined text-on-surface-variant">person_heart</span>
 <span class="text-on-surface font-body-md">Favorite Trainers</span>
 </div>
 <span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
 </button>
-<button class="flex items-center justify-between group hover:bg-surface-container-low p-2 rounded-lg transition-all duration-300">
+<button class="flex items-center justify-between group hover:bg-surface-container-low p-2 rounded-lg transition-all duration-300" data-doorstep-nav="/preferences">
 <div class="flex items-center gap-4">
 <span class="material-symbols-outlined text-on-surface-variant">loyalty</span>
 <span class="text-on-surface font-body-md">Packages &amp; Subscriptions</span>
@@ -228,14 +242,14 @@
 </div>
 <!-- Logout Button Section -->
 <section class="mt-section-gap mb-12 flex justify-center">
-<button class="flex items-center gap-2 text-error font-label-md px-12 py-3 rounded-xl border border-error/20 hover:bg-error/5 transition-colors active:scale-95">
+<button class="flex items-center gap-2 text-error font-label-md px-12 py-3 rounded-xl border border-error/20 hover:bg-error/5 transition-colors active:scale-95" data-doorstep-action="logout">
 <span class="material-symbols-outlined">logout</span>
                 Logout
             </button>
 </section>
 </main>
 <!-- Bottom Navigation Bar (Mobile) -->
-<nav class="md:hidden fixed bottom-0 w-full flex justify-around items-center px-4 py-3 z-50 bg-surface-container-lowest dark:bg-surface-container-high shadow-[0px_-4px_20px_0px_rgba(0,0,0,0.05)] rounded-t-xl">
+<nav class="stitch-embed-nav md:hidden fixed bottom-0 w-full flex justify-around items-center px-4 py-3 z-50 bg-surface-container-lowest dark:bg-surface-container-high shadow-[0px_-4px_20px_0px_rgba(0,0,0,0.05)] rounded-t-xl">
 <a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 duration-150" href="#">
 <span class="material-symbols-outlined">home_filled</span>
 <span class="font-label-sm text-label-sm">Home</span>
@@ -283,8 +297,8 @@
 </a>
 </nav>
 </aside>
+<script src="/stitch/embed-nav.js"></script>
 <script>
-        // Micro-interaction for menu items
         document.querySelectorAll('.group').forEach(item => {
             item.addEventListener('mouseenter', () => {
                 item.style.backgroundColor = 'rgba(234, 232, 227, 0.4)';
@@ -292,15 +306,6 @@
             item.addEventListener('mouseleave', () => {
                 item.style.backgroundColor = '';
             });
-        });
-
-        // Simple Logout Confirmation Logic (UI only)
-        const logoutBtn = document.querySelector('.text-error');
-        logoutBtn.addEventListener('click', () => {
-            if(confirm('Are you sure you want to sign out from your peaceful session?')) {
-                console.log('User logging out...');
-                // In a real app: window.location.href = '/login';
-            }
         });
     </script>
 

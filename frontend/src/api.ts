@@ -77,6 +77,16 @@ export function getAuthToken() {
   return localStorage.getItem(AUTH_TOKEN_KEY)
 }
 
+export function isAuthenticated() {
+  const token = getAuthToken()
+  return typeof token === 'string' && token.trim().length > 0
+}
+
+export function clearAuth() {
+  localStorage.removeItem(AUTH_TOKEN_KEY)
+  clearPendingPhone()
+}
+
 export async function sendOtp(phone: string) {
   try {
     const response = await fetch(`${API_BASE_URL}/api/auth/send-otp`, {

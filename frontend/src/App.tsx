@@ -10,8 +10,9 @@ import {
 } from 'react-router-dom'
 import {
   clearPendingPhone,
-  getAuthToken,
+  clearAuth,
   getPendingPhone,
+  isAuthenticated,
   resendOtp,
   sendOtp,
   verifyOtp,
@@ -34,19 +35,58 @@ function Screen({
   hotspots,
   showBottomNav = true,
   allowEmbedInteraction = true,
+  lockViewport = false,
+  cohesiveBottomNav = false,
 }: {
   htmlSrc: string
   alt: string
   hotspots?: Hotspot[]
   showBottomNav?: boolean
   allowEmbedInteraction?: boolean
+  lockViewport?: boolean
+  cohesiveBottomNav?: boolean
 }) {
   const navigate = useNavigate()
   const location = useLocation()
 
+  useEffect(() => {
+    async function onEmbedMessage(event: MessageEvent) {
+      if (!event.data || typeof event.data !== 'object') return
+
+      if (event.data.type === 'doorstep-navigate' && typeof event.data.path === 'string') {
+        navigate(event.data.path)
+        return
+      }
+
+      if (event.data.type === 'doorstep-share') {
+        const shareData = {
+          title: 'Doorstep Yoga Trainer',
+          text: 'Check out this trainer profile on Doorstep Yoga.',
+          url: window.location.href,
+        }
+        if (navigator.share) {
+          await navigator.share(shareData)
+        } else {
+          await navigator.clipboard.writeText(window.location.href)
+        }
+        return
+      }
+
+      if (event.data.type === 'doorstep-logout') {
+        clearAuth()
+        navigate('/login')
+      }
+    }
+
+    window.addEventListener('message', onEmbedMessage)
+    return () => window.removeEventListener('message', onEmbedMessage)
+  }, [navigate])
+
   return (
-    <div className="app-bg">
-      <main className="phone-shell page-shell page-shell-embedded">
+    <div className={`app-bg ${lockViewport ? 'app-bg-viewport-lock' : ''}`}>
+      <main
+        className={`phone-shell page-shell page-shell-embedded${cohesiveBottomNav ? ' page-shell-cohesive-nav' : ''}`}
+      >
         <div className={`screen-wrap ${showBottomNav ? 'screen-wrap-with-nav' : ''}`}>
           <iframe
             key={`${htmlSrc}-${location.pathname}`}
@@ -530,7 +570,7 @@ function TrainerListingScreen() {
           </button>
         <button
           type="button"
-            className="trainer-cta trainer-cta-primary"
+            className="trainer-cta trainer-cta-secondary"
             onClick={() => navigate('/group-session')}
         >
             Book a Group Session
@@ -665,7 +705,7 @@ function NotificationsScreen() {
           time: '1d ago',
           tone: 'gray',
           icon: 'workshop',
-          to: '/trainers?category=Vinyasa',
+          to: '/trainers?category=1-on-1%20Yoga',
         },
       ],
     },
@@ -1189,17 +1229,25 @@ function ConfirmationScreen() {
 }
 
 function RequireAuth({ children }: { children: ReactNode }) {
-  return getAuthToken() ? <>{children}</> : <Navigate to="/login" replace />
+  return isAuthenticated() ? <>{children}</> : <Navigate to="/login" replace />
 }
 
 function RedirectIfAuthenticated({ children }: { children: ReactNode }) {
-  return getAuthToken() ? <Navigate to="/home" replace /> : <>{children}</>
+  return isAuthenticated() ? <Navigate to="/home" replace /> : <>{children}</>
+}
+
+function RootRedirect() {
+  return <Navigate to={isAuthenticated() ? '/home' : '/login'} replace />
+}
+
+function NotFoundRedirect() {
+  return <Navigate to={isAuthenticated() ? '/home' : '/login'} replace />
 }
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to={getAuthToken() ? '/home' : '/login'} replace />} />
+      <Route path="/" element={<RootRedirect />} />
       <Route
         path="/login"
         element={
@@ -1231,49 +1279,16 @@ export default function App() {
             <Screen
               htmlSrc={stitchScreenUrl('home_service_selection')}
               alt="Home Service Selection"
-              showBottomNav={false}
+              showBottomNav={true}
               allowEmbedInteraction={true}
+              lockViewport={true}
+              cohesiveBottomNav={true}
               hotspots={[
-                {
-                  to: '/trainers?category=1-on-1%20Yoga',
-                  label: 'Service one on one',
-                  style: { left: '20px', width: '166px', top: '332px', height: '180px' },
-                },
-                {
-                  to: '/trainers?category=Prenatal%20Yoga',
-                  label: 'Service prenatal',
-                  style: { left: '204px', width: '166px', top: '332px', height: '180px' },
-                },
-                {
-                  to: '/trainers?category=Couples%20Yoga',
-                  label: 'Service couples',
-                  style: { left: '20px', width: '166px', top: '516px', height: '180px' },
-                },
-                {
-                  to: '/trainers?category=Therapy%20Yoga',
-                  label: 'Service therapy',
-                  style: { left: '204px', width: '166px', top: '516px', height: '180px' },
-                },
-                {
-                  to: '/trainers',
-                  label: 'View mentors',
-                  style: { left: '5%', right: '36%', top: '83.5%', height: '12%' },
-                },
-                {
-                  to: '/group-session',
-                  label: 'Group sessions service',
-                  style: { left: '12px', width: '366px', top: '688px', height: '150px' },
-                },
                 {
                   to: '/preferences',
                   label: 'Refine preferences CTA',
                   variant: 'preferences-fab',
-                  style: { right: '14px', bottom: '92px', width: '56px', height: '56px', zIndex: 120 },
-                },
-                {
-                  to: '/notifications',
-                  label: 'Home notifications',
-                  style: { left: '86%', width: '10%', top: '1%', height: '5%' },
+                  style: { right: '14px', bottom: '82px', width: '56px', height: '56px', zIndex: 120 },
                 },
               ]}
             />
@@ -1327,34 +1342,8 @@ export default function App() {
             <Screen
               htmlSrc={stitchScreenUrl('user_profile_account')}
               alt="User Profile Account"
-              showBottomNav={false}
-              hotspots={[
-                {
-                  to: '/notifications',
-                  label: 'Account notifications',
-                  style: { left: '86%', width: '10%', top: '1.2%', height: '5%' },
-                },
-                {
-                  to: '/home',
-                  label: 'Account page bottom home',
-                  style: { left: '2%', width: '24%', top: '92.5%', height: '7.2%' },
-                },
-                {
-                  to: '/trainers',
-                  label: 'Account page bottom search',
-                  style: { left: '26%', width: '24%', top: '92.5%', height: '7.2%' },
-                },
-                {
-                  to: '/favorites',
-                  label: 'Account page bottom favorites',
-                  style: { left: '50%', width: '24%', top: '92.5%', height: '7.2%' },
-                },
-                {
-                  to: '/account',
-                  label: 'Account page bottom account',
-                  style: { left: '74%', width: '24%', top: '92.5%', height: '7.2%' },
-                },
-              ]}
+              showBottomNav={true}
+              lockViewport={true}
             />
           </RequireAuth>
         }
@@ -1366,28 +1355,8 @@ export default function App() {
             <Screen
               htmlSrc={stitchScreenUrl('trainer_profile_page')}
               alt="Trainer Profile"
-              hotspots={[
-                {
-                  to: '/trainers',
-                  label: 'Trainer profile back',
-                  style: { left: '3%', width: '12%', top: '1.3%', height: '5%' },
-                },
-                {
-                  action: 'share',
-                  label: 'Trainer profile share',
-                  style: { left: '64%', width: '12%', top: '1.3%', height: '5%' },
-                },
-                {
-                  to: '/favorites',
-                  label: 'Trainer profile favorite',
-                  style: { left: '78%', width: '12%', top: '1.3%', height: '5%' },
-                },
-                {
-                  to: '/schedule',
-                  label: 'Check availability',
-                  style: { left: '7%', right: '7%', top: '92%', height: '6%' },
-                },
-              ]}
+              showBottomNav={false}
+              allowEmbedInteraction={true}
             />
           </RequireAuth>
         }
@@ -1408,7 +1377,7 @@ export default function App() {
           </RequireAuth>
         }
       />
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<NotFoundRedirect />} />
     </Routes>
   )
 }
